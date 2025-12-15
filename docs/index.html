@@ -13,6 +13,161 @@
     <!-- <script src="https://accounts.google.com/gsi/client" async defer></script> -->
     <!-- EmailJS for sending emails -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <!-- Christmas Styles -->
+    <style>
+        /* Christmas Banner Styles */
+        .christmas-banner {
+            background: linear-gradient(135deg, #c41e3a 0%, #2e8b57 50%, #c41e3a 100%);
+            padding: 15px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 3px solid #ffd700;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin-top: 70px;
+        }
+        
+        .christmas-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .christmas-message h3 {
+            color: white;
+            font-size: 1.8rem;
+            margin: 0 0 8px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: christmasGlow 2s ease-in-out infinite alternate;
+        }
+        
+        .christmas-message p {
+            color: #fff;
+            font-size: 1rem;
+            margin: 0 0 10px 0;
+            opacity: 0.95;
+        }
+        
+        .christmas-offer {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,215,0,0.5);
+        }
+        
+        .offer-text {
+            color: #ffd700;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        /* Christmas Icons Animation */
+        .christmas-icons {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+        
+        .christmas-icon {
+            position: absolute;
+            font-size: 2rem;
+            animation: float 3s ease-in-out infinite;
+            opacity: 0.7;
+        }
+        
+        .christmas-icon:nth-child(1) { left: 5%; animation-delay: 0s; }
+        .christmas-icon:nth-child(2) { left: 20%; animation-delay: 0.5s; }
+        .christmas-icon:nth-child(3) { right: 20%; animation-delay: 1s; }
+        .christmas-icon:nth-child(4) { right: 5%; animation-delay: 1.5s; }
+        .christmas-icon:nth-child(5) { left: 50%; transform: translateX(-50%) translateY(-50%); animation-delay: 2s; }
+        
+        /* Snowflakes Animation */
+        .christmas-decorations {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+        
+        .snowflake {
+            position: absolute;
+            color: rgba(255,255,255,0.8);
+            font-size: 1.5rem;
+            animation: snowfall 4s linear infinite;
+        }
+        
+        .snowflake:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 3s; }
+        .snowflake:nth-child(2) { left: 25%; animation-delay: 1s; animation-duration: 4s; }
+        .snowflake:nth-child(3) { left: 40%; animation-delay: 2s; animation-duration: 3.5s; }
+        .snowflake:nth-child(4) { left: 60%; animation-delay: 0.5s; animation-duration: 4.5s; }
+        .snowflake:nth-child(5) { left: 80%; animation-delay: 1.5s; animation-duration: 3s; }
+        .snowflake:nth-child(6) { left: 95%; animation-delay: 2.5s; animation-duration: 4s; }
+        
+        /* Animations */
+        @keyframes christmasGlow {
+            0% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 10px rgba(255,215,0,0.5); }
+            100% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(255,215,0,0.8); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(-10px) rotate(0deg); }
+            50% { transform: translateY(10px) rotate(180deg); }
+        }
+        
+        @keyframes snowfall {
+            0% { 
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { 
+                transform: translateY(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .christmas-message h3 {
+                font-size: 1.4rem;
+            }
+            
+            .christmas-message p {
+                font-size: 0.9rem;
+                padding: 0 20px;
+            }
+            
+            .offer-text {
+                font-size: 1rem;
+            }
+            
+            .christmas-icon {
+                font-size: 1.5rem;
+            }
+            
+            .christmas-icons .christmas-icon:nth-child(2),
+            .christmas-icons .christmas-icon:nth-child(4) {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
@@ -53,6 +208,34 @@
             </div>
         </div>
     </nav>
+
+    <!-- Christmas & New Year Banner -->
+    <div class="christmas-banner">
+        <div class="christmas-content">
+            <div class="christmas-icons">
+                <span class="christmas-icon">🎄</span>
+                <span class="christmas-icon">🐔</span>
+                <span class="christmas-icon">🎅</span>
+                <span class="christmas-icon">🥚</span>
+                <span class="christmas-icon">⭐</span>
+            </div>
+            <div class="christmas-message">
+                <h3>🎄 Merry Christmas & Happy New Year! 🎊</h3>
+                <p>Celebrate the holidays with fresh, organic Kienyeji chicken from our farm to your family table!</p>
+                <div class="christmas-offer">
+                    <span class="offer-text">🎁 Special Holiday Orders Available 🎁</span>
+                </div>
+            </div>
+            <div class="christmas-decorations">
+                <div class="snowflake">❄️</div>
+                <div class="snowflake">❄️</div>
+                <div class="snowflake">❄️</div>
+                <div class="snowflake">❄️</div>
+                <div class="snowflake">❄️</div>
+                <div class="snowflake">❄️</div>
+            </div>
+        </div>
+    </div>
 
     <!-- Hero Section -->
     <section id="home" class="hero">
@@ -362,7 +545,7 @@
                 </div>
                 
                 <div class="about-image">
-                    <img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=500&h=600&fit=crop&crop=center" alt="Our free-range farm with chickens" loading="lazy">
+                    <img src="chicken%20pics/chickenfeeding.jpeg" alt="Our free-range farm with chickens" loading="lazy">
                     <div class="about-pattern"></div>
                 </div>
             </div>
@@ -488,7 +671,6 @@
                     </div>
                     <p>"Best kienyeji I've had in years – juicy and firm just the way I remember! The flavor is absolutely authentic."</p>
                     <div class="customer-info">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="Mary K. customer" class="customer-photo" loading="lazy">
                         <div>
                             <h4>Mary K.</h4>
                             <span>Nairobi</span>
@@ -507,7 +689,6 @@
                     </div>
                     <p>"Excellent service! Delivered on time and the chicken was fresh. My family loves the natural taste."</p>
                     <div class="customer-info">
-                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" alt="Peter M. customer" class="customer-photo" loading="lazy">
                         <div>
                             <h4>Peter M.</h4>
                             <span>Kiambu</span>
@@ -526,7 +707,6 @@
                     </div>
                     <p>"We order bulk for our restaurant. Quality is consistent and customers always compliment the taste!"</p>
                     <div class="customer-info">
-                        <img src="https://images.unsplash.com/photo-1494790108755-2616c45d29e1?w=100&h=100&fit=crop&crop=face" alt="Grace N. restaurant owner" class="customer-photo" loading="lazy">
                         <div>
                             <h4>Grace N.</h4>
                             <span>Restaurant Owner</span>
@@ -548,13 +728,13 @@
             
             <div class="gallery-grid">
                 <div class="gallery-item">
-                    <img src="chicken%20pics/chiken1.jpeg" alt="Free-range chickens roaming" loading="lazy">
+                    <img src="chicken%20pics/chicken1.1.jpeg" alt="Free-range chickens roaming" loading="lazy">
                     <div class="gallery-overlay">
                         <h4>Free-Range Living</h4>
                     </div>
                 </div>
                 <div class="gallery-item">
-                    <img src="chicken%20pics/chicken2.jpeg" alt="Healthy Kienyeji chickens" loading="lazy">
+                    <img src="chicken%20pics/chicken5.jpeg" alt="Healthy Kienyeji chickens" loading="lazy">
                     <div class="gallery-overlay">
                         <h4>Healthy & Active</h4>
                     </div>
@@ -572,7 +752,7 @@
                     </div>
                 </div>
                 <div class="gallery-item">
-                    <img src="chicken%20pics/chicken5.jpeg" alt="Chicken coop and housing" loading="lazy">
+                    <img src="chicken%20pics/chicken2.jpeg" alt="Chicken coop and housing" loading="lazy">
                     <div class="gallery-overlay">
                         <h4>Proper Housing</h4>
                     </div>

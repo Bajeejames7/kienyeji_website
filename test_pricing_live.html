@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Pricing Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .result { margin: 10px 0; padding: 10px; background: #f0f0f0; border-radius: 3px; }
+        .error { background: #ffebee; color: #c62828; }
+        .success { background: #e8f5e8; color: #2e7d32; }
+        select, input { margin: 5px; padding: 8px; }
+        button { padding: 10px 20px; background: #2c5530; color: white; border: none; border-radius: 3px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🐔 Kienyeji Farm Pricing Test</h1>
+    
+    <div class="test-section">
+        <h3>Price Calculator Test</h3>
+        <div>
+            <label>Order Type:</label>
+            <select id="testOrderType">
+                <option value="">Select Order Type</option>
+                <optgroup label="Kienyeji Products">
+                    <option value="live-jogoo-kienyeji">Live Jogoo (Roosters) - Ksh 1,500/bird</option>
+                    <option value="live-hens-kienyeji">Live Hens (Standard) - Ksh 1,200/bird</option>
+                    <option value="live-hens-premium-kienyeji">Live Hens (Premium) - Ksh 1,300/bird</option>
+                    <option value="cleaned-jogoo-kienyeji">Slaughtered & Cleaned Jogoo - Ksh 1,500/bird</option>
+                    <option value="cleaned-hens-kienyeji">Slaughtered & Cleaned Hens - Ksh 1,200/bird</option>
+                    <option value="cleaned-hens-premium-kienyeji">Slaughtered & Cleaned Hens (Premium) - Ksh 1,300/bird</option>
+                    <option value="bulk-hens-kienyeji">Bulk Kienyeji Hens - Ksh 1,000/bird</option>
+                    <option value="bulk-jogoo-kienyeji">Bulk Kienyeji Jogoo - Ksh 1,300/bird</option>
+                    <option value="eggs-kienyeji">Kienyeji Eggs (Ksh 900/tray)</option>
+                </optgroup>
+                <optgroup label="Additional Products">
+                    <option value="live-broiler">Live Broiler Chicken (Ksh 1,000/bird)</option>
+                    <option value="cleaned-broiler">Slaughtered & Cleaned Broiler (Ksh 1,000/bird)</option>
+                    <option value="bulk-broiler">Bulk Broiler Order (Ksh 900/bird)</option>
+                    <option value="eggs-broiler">Broiler Layers Eggs (Ksh 400/tray)</option>
+                </optgroup>
+            </select>
+        </div>
+        <div>
+            <label>Quantity:</label>
+            <input type="number" id="testQuantity" min="1" value="10" />
+        </div>
+        <button onclick="testPricing()">Calculate Price</button>
+        <div id="testResult" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>Automated Tests</h3>
+        <button onclick="runAutomatedTests()">Run All Tests</button>
+        <div id="automatedResults"></div>
+    </div>
+
+    <script>
+        // Copy the pricing configuration from the main script
+        const PRICING_CONFIG = {
+            kienyeji: {
+                jogoo: {
+                    live: 1500,
+                    cleaned: 1500
+                },
+                hens: {
+                    live: 1200,
+                    cleaned: 1200
+                },
+                bulk: {
+                    hens: 1000,
+                    jogoo: 1300
+                }
+            },
+            broiler: {
+                chickens: {
+                    live: 1000,
+                    cleaned: 1000
+                },
+                bulk: 900
+            },
+            eggs: {
+                kienyeji: 900,  // per tray
+                broiler: 400    // per tray
+            }
+        };
+
+        const ORDER_TYPE_MAPPING = {
+            'live-jogoo-kienyeji': { category: 'kienyeji', type: 'jogoo', processing: 'live' },
+            'live-hens-kienyeji': { category: 'kienyeji', type: 'hens', processing: 'live' },
+            'cleaned-jogoo-kienyeji': { category: 'kienyeji', type: 'jogoo', processing: 'cleaned' },
+            'cleaned-hens-kienyeji': { category: 'kienyeji', type: 'hens', processing: 'cleaned' },
+            'bulk-hens-kienyeji': { category: 'kienyeji', type: 'bulk', subtype: 'hens', processing: 'mixed' },
+            'bulk-jogoo-kienyeji': { category: 'kienyeji', type: 'bulk', subtype: 'jogoo', processing: 'mixed' },
+            'live-broiler': { category: 'broiler', type: 'chickens', processing: 'live' },
+            'cleaned-broiler': { category: 'broiler', type: 'chickens', processing: 'cleaned' },
+            'bulk-broiler': { category: 'broiler', type: 'bulk', processing: 'mixed' },
+            'eggs-kienyeji': { category: 'eggs', type: 'kienyeji' },
+            'eggs-broiler': { category: 'eggs', type: 'broiler' }
+        };
+
+        function calculateTestPrice(orderType, quantity) {
+            if (ORDER_TYPE_MAPPING[orderType]) {
+                const mapping = ORDER_TYPE_MAPPING[orderType];
+                
+                if (mapping.category === 'kienyeji') {
+                    if (mapping.type === 'bulk') {
+                        return quantity * PRICING_CONFIG.kienyeji.bulk[mapping.subtype];
+                    } else {
+                        return quantity * PRICING_CONFIG.kienyeji[mapping.type][mapping.processing];
+                    }
+                } else if (mapping.category === 'broiler') {
+                    if (mapping.type === 'bulk') {
+                        return quantity * PRICING_CONFIG.broiler.bulk;
+                    } else {
+                        return quantity * PRICING_CONFIG.broiler[mapping.type][mapping.processing];
+                    }
+                } else if (mapping.category === 'eggs') {
+                    const trays = Math.ceil(quantity / 30);
+                    return trays * PRICING_CONFIG.eggs[mapping.type];
+                }
+            }
+            
+            return 0;
+        }
+
+        function testPricing() {
+            const orderType = document.getElementById('testOrderType').value;
+            const quantity = parseInt(document.getElementById('testQuantity').value) || 0;
+            const resultDiv = document.getElementById('testResult');
+            
+            if (!orderType || quantity <= 0) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = 'Please select an order type and enter a valid quantity.';
+                resultDiv.style.display = 'block';
+                return;
+            }
+            
+            const totalPrice = calculateTestPrice(orderType, quantity);
+            const deposit = Math.round(totalPrice * 0.5);
+            const balance = totalPrice - deposit;
+            
+            let displayText = '';
+            if (orderType.includes('eggs')) {
+                const trays = Math.ceil(quantity / 30);
+                displayText = `${trays} tray(s) × 30 eggs = ${quantity} eggs`;
+            } else {
+                displayText = `${quantity} birds`;
+            }
+            
+            resultDiv.className = 'result success';
+            resultDiv.innerHTML = `
+                <strong>Order:</strong> ${orderType}<br>
+                <strong>Quantity:</strong> ${displayText}<br>
+                <strong>Total Price:</strong> Ksh ${totalPrice.toLocaleString()}<br>
+                <strong>Deposit (50%):</strong> Ksh ${deposit.toLocaleString()}<br>
+                <strong>Balance:</strong> Ksh ${balance.toLocaleString()}
+            `;
+            resultDiv.style.display = 'block';
+        }
+
+        function runAutomatedTests() {
+            const resultsDiv = document.getElementById('automatedResults');
+            resultsDiv.innerHTML = '<p>Running tests...</p>';
+            
+            const tests = [
+                { type: 'live-jogoo-kienyeji', qty: 10, expected: 15000, name: 'Live Jogoo' },
+                { type: 'live-hens-kienyeji', qty: 5, expected: 6000, name: 'Live Hens' },
+                { type: 'live-hens-premium-kienyeji', qty: 8, expected: 10400, name: 'Premium Hens' },
+                { type: 'cleaned-jogoo-kienyeji', qty: 3, expected: 4500, name: 'Cleaned Jogoo' },
+                { type: 'cleaned-hens-kienyeji', qty: 12, expected: 14400, name: 'Cleaned Hens' },
+                { type: 'bulk-kienyeji', qty: 50, expected: 50000, name: 'Bulk Kienyeji' },
+                { type: 'eggs-kienyeji', qty: 60, expected: 1800, name: 'Kienyeji Eggs (2 trays)' },
+                { type: 'eggs-broiler', qty: 90, expected: 1200, name: 'Broiler Eggs (3 trays)' }
+            ];
+            
+            let passed = 0;
+            let failed = 0;
+            let results = '<h4>Test Results:</h4>';
+            
+            tests.forEach(test => {
+                const actual = calculateTestPrice(test.type, test.qty);
+                if (actual === test.expected) {
+                    passed++;
+                    results += `<div class="result success">✅ ${test.name}: ${test.qty} → Ksh ${actual.toLocaleString()}</div>`;
+                } else {
+                    failed++;
+                    results += `<div class="result error">❌ ${test.name}: Expected Ksh ${test.expected.toLocaleString()}, got Ksh ${actual.toLocaleString()}</div>`;
+                }
+            });
+            
+            results += `<div class="result"><strong>Summary:</strong> ${passed} passed, ${failed} failed</div>`;
+            resultsDiv.innerHTML = results;
+        }
+
+        // Auto-run tests on page load
+        window.addEventListener('load', () => {
+            setTimeout(runAutomatedTests, 500);
+        });
+    </script>
+</body>
+</html>

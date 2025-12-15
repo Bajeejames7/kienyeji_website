@@ -154,17 +154,70 @@ contactForm.addEventListener('submit', function(e) {
     whatsappMessage += `Name: ${name}\n`;
     whatsappMessage += `Phone: ${phone}\n`;
     if (email) whatsappMessage += `Email: ${email}\n`;
-    whatsappMessage += `Order Type: ${orderType}\n`;
+    
+    // Add order type with pricing information
+    let orderTypeText = '';
+    let pricingInfo = '';
+    
+    switch(orderType) {
+        case 'live-jogoo-kienyeji':
+            orderTypeText = 'Live Jogoo (Roosters)';
+            pricingInfo = 'Ksh 1,500 per bird';
+            break;
+        case 'live-hens-kienyeji':
+            orderTypeText = 'Live Hens (Standard)';
+            pricingInfo = 'Ksh 1,200 per bird';
+            break;
+        case 'live-hens-premium-kienyeji':
+            orderTypeText = 'Live Hens (Premium)';
+            pricingInfo = 'Ksh 1,300 per bird';
+            break;
+        case 'cleaned-jogoo-kienyeji':
+            orderTypeText = 'Slaughtered & Cleaned Jogoo';
+            pricingInfo = 'Ksh 1,500 per bird';
+            break;
+        case 'cleaned-hens-kienyeji':
+            orderTypeText = 'Slaughtered & Cleaned Hens';
+            pricingInfo = 'Ksh 1,200 per bird';
+            break;
+        case 'cleaned-hens-premium-kienyeji':
+            orderTypeText = 'Slaughtered & Cleaned Hens (Premium)';
+            pricingInfo = 'Ksh 1,300 per bird';
+            break;
+        case 'bulk-kienyeji':
+            orderTypeText = 'Bulk Kienyeji Order';
+            pricingInfo = 'Ksh 1,000 per bird';
+            break;
+        case 'eggs-kienyeji':
+            orderTypeText = 'Kienyeji Eggs';
+            pricingInfo = 'Ksh 900 per tray (30 eggs)';
+            break;
+        case 'eggs-broiler':
+            orderTypeText = 'Broiler Layers Eggs';
+            pricingInfo = 'Ksh 400 per tray (30 eggs)';
+            break;
+        default:
+            orderTypeText = orderType;
+            pricingInfo = 'Please provide pricing';
+    }
+    
+    whatsappMessage += `Order Type: ${orderTypeText}\n`;
+    if (pricingInfo) whatsappMessage += `Pricing: ${pricingInfo}\n`;
     whatsappMessage += `Message: ${message}`;
     
     // Add specific notes based on order type
-    if (orderType === 'bulk' || orderType === 'bulk-100') {
-        whatsappMessage += `\n\nI'm interested in bulk pricing. Please provide a detailed quote.`;
-    } else if (orderType === 'live') {
-        whatsappMessage += `\n\nI prefer live chicken delivery. Please confirm availability.`;
-    } else if (orderType === 'cleaned') {
-        whatsappMessage += `\n\nI need slaughtered and cleaned chicken. Please confirm processing time.`;
+    if (orderType.includes('bulk')) {
+        whatsappMessage += `\n\nI'm interested in bulk pricing. Please provide a detailed quote and confirm minimum order quantities.`;
+    } else if (orderType.includes('live')) {
+        whatsappMessage += `\n\nI prefer live chicken delivery. Please confirm availability and delivery arrangements.`;
+    } else if (orderType.includes('cleaned')) {
+        whatsappMessage += `\n\nI need slaughtered and cleaned chicken. Please confirm processing time and delivery schedule.`;
+    } else if (orderType.includes('eggs')) {
+        whatsappMessage += `\n\nI'm interested in fresh eggs. Please confirm availability and delivery options.`;
     }
+    
+    // Add deposit information
+    whatsappMessage += `\n\nNote: I understand a 50% deposit is required before processing begins.`;
     
     // Encode the message for URL
     const encodedMessage = encodeURIComponent(whatsappMessage);
@@ -343,8 +396,10 @@ function searchProducts(query) {
 }
 
 // Add price calculator (if you want to add this feature)
-function calculatePrice(weight, pricePerKg) {
-    return weight * pricePerKg;
+// Add price calculator (if you want to add this feature)
+function calculatePrice() {
+    // This function is now handled by the main calculatePrice function
+    return 0;
 }
 
 // WhatsApp floating button pulse animation
@@ -470,11 +525,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Add price calculation listeners for email order form
     const quantityInput = document.getElementById('quantity');
-    const weightInput = document.getElementById('weight');
     const orderTypeSelect = document.getElementById('emailOrderType');
     
-    if (quantityInput && weightInput && orderTypeSelect) {
-        [quantityInput, weightInput, orderTypeSelect].forEach(input => {
+    if (quantityInput && orderTypeSelect) {
+        [quantityInput, orderTypeSelect].forEach(input => {
             input.addEventListener('input', calculatePrice);
             input.addEventListener('change', calculatePrice);
         });
@@ -766,71 +820,173 @@ function signOut() {
     showLoginSection();
 }
 
+// Pricing configuration object - KIENYEJI AND BROILER CHICKENS
+const PRICING_CONFIG = {
+    kienyeji: {
+        jogoo: {
+            live: 1500,
+            cleaned: 1500
+        },
+        hens: {
+            live: 1200,
+            cleaned: 1200
+        },
+        bulk: {
+            hens: 1000,
+            jogoo: 1300
+        }
+    },
+    broiler: {
+        chickens: {
+            live: 1000,
+            cleaned: 1000
+        },
+        bulk: 900
+    },
+    eggs: {
+        kienyeji: 900,  // per tray
+        broiler: 400    // per tray
+    }
+};
+
+// Order type mapping - KIENYEJI AND BROILER CHICKENS
+const ORDER_TYPE_MAPPING = {
+    // Kienyeji Products
+    'live-jogoo-kienyeji': { category: 'kienyeji', type: 'jogoo', processing: 'live' },
+    'live-hens-kienyeji': { category: 'kienyeji', type: 'hens', processing: 'live' },
+    'cleaned-jogoo-kienyeji': { category: 'kienyeji', type: 'jogoo', processing: 'cleaned' },
+    'cleaned-hens-kienyeji': { category: 'kienyeji', type: 'hens', processing: 'cleaned' },
+    'bulk-hens-kienyeji': { category: 'kienyeji', type: 'bulk', subtype: 'hens', processing: 'mixed' },
+    'bulk-jogoo-kienyeji': { category: 'kienyeji', type: 'bulk', subtype: 'jogoo', processing: 'mixed' },
+    
+    // Broiler Products
+    'live-broiler': { category: 'broiler', type: 'chickens', processing: 'live' },
+    'cleaned-broiler': { category: 'broiler', type: 'chickens', processing: 'cleaned' },
+    'bulk-broiler': { category: 'broiler', type: 'bulk', processing: 'mixed' },
+    
+    // Egg Products (both types available)
+    'eggs-kienyeji': { category: 'eggs', type: 'kienyeji' },
+    'eggs-broiler': { category: 'eggs', type: 'broiler' },
+    
+    // Legacy support for existing order types
+    'live-kienyeji': { category: 'kienyeji', type: 'hens', processing: 'live' },
+    'cleaned-kienyeji': { category: 'kienyeji', type: 'hens', processing: 'cleaned' },
+    'bulk-kienyeji': { category: 'kienyeji', type: 'bulk', subtype: 'hens', processing: 'mixed' }
+};
+
 // Price calculation for all product types
 function calculatePrice() {
     const quantity = parseInt(document.getElementById('quantity').value) || 0;
-    const weight = parseFloat(document.getElementById('weight').value) || 0;
     const orderType = document.getElementById('emailOrderType').value;
     
     if (quantity > 0 && orderType) {
-        let pricePerKg = 0;
         let pricePerBird = 0;
-        let estimatedWeight = weight || (quantity * 2); // Default 2kg per chicken
         let totalPrice = 0;
         let usePerBird = false;
         
-        switch (orderType) {
-            case 'live':
-                pricePerKg = 800;
-                totalPrice = Math.round(estimatedWeight * pricePerKg);
-                break;
-            case 'cleaned':
-                pricePerKg = 900;
-                totalPrice = Math.round(estimatedWeight * pricePerKg);
-                break;
-            case 'bulk':
-                pricePerKg = quantity >= 10 ? 750 : 800; // Bulk discount for 10+
-                totalPrice = Math.round(estimatedWeight * pricePerKg);
-                break;
-            case 'bulk-100':
-                if (quantity >= 100) {
-                    pricePerBird = 1000;
-                    totalPrice = quantity * pricePerBird;
-                    usePerBird = true;
+        // Check if it's a new product type
+        if (ORDER_TYPE_MAPPING[orderType]) {
+            const mapping = ORDER_TYPE_MAPPING[orderType];
+            
+            if (mapping.category === 'kienyeji') {
+                if (mapping.type === 'bulk') {
+                    // Bulk pricing depends on subtype (hens vs jogoo)
+                    pricePerBird = PRICING_CONFIG.kienyeji.bulk[mapping.subtype];
                 } else {
-                    document.getElementById('priceEstimate').innerHTML = `
-                        <h4 style="color: #e74c3c;">Minimum Order: 100 birds</h4>
-                        <small style="color: #e74c3c;">Large bulk orders require minimum 100 birds.</small>
-                    `;
-                    document.getElementById('priceEstimate').style.display = 'block';
-                    return;
+                    pricePerBird = PRICING_CONFIG.kienyeji[mapping.type][mapping.processing];
                 }
-                break;
-            case 'slaughter':
-                if (quantity >= 100) {
-                    pricePerBird = 1000;
+                totalPrice = quantity * pricePerBird;
+                usePerBird = true;
+            } else if (mapping.category === 'broiler') {
+                if (mapping.type === 'bulk') {
+                    pricePerBird = PRICING_CONFIG.broiler.bulk;
+                } else {
+                    pricePerBird = PRICING_CONFIG.broiler[mapping.type][mapping.processing];
+                }
+                totalPrice = quantity * pricePerBird;
+                usePerBird = true;
+            }
+        } else {
+            // Handle legacy cases and other product types
+            switch (orderType) {
+                // Legacy Kienyeji Products - map to new structure
+                case 'live-kienyeji':
+                    pricePerBird = PRICING_CONFIG.kienyeji.hens.live;
                     totalPrice = quantity * pricePerBird;
-                    let depositAmount = Math.round(totalPrice * 0.5);
                     usePerBird = true;
-                    
+                    break;
+                case 'cleaned-kienyeji':
+                    pricePerBird = PRICING_CONFIG.kienyeji.hens.cleaned;
+                    totalPrice = quantity * pricePerBird;
+                    usePerBird = true;
+                    break;
+                case 'bulk-kienyeji':
+                    pricePerBird = PRICING_CONFIG.kienyeji.bulk.hens;
+                    totalPrice = quantity * pricePerBird;
+                    usePerBird = true;
+                    break;
+                
+                // Broiler Products
+                case 'live-broiler':
+                    pricePerBird = PRICING_CONFIG.broiler.chickens.live;
+                    totalPrice = quantity * pricePerBird;
+                    usePerBird = true;
+                    break;
+                case 'cleaned-broiler':
+                    pricePerBird = PRICING_CONFIG.broiler.chickens.cleaned;
+                    totalPrice = quantity * pricePerBird;
+                    usePerBird = true;
+                    break;
+                case 'bulk-broiler':
+                    pricePerBird = PRICING_CONFIG.broiler.bulk;
+                    totalPrice = quantity * pricePerBird;
+                    usePerBird = true;
+                    break;
+                
+
+                
+                // Egg Products
+                case 'eggs-kienyeji':
+                    // Assuming eggs are sold by tray (30 eggs per tray)
+                    const traysKienyeji = Math.ceil(quantity / 30);
+                    const pricePerTrayKienyeji = PRICING_CONFIG.eggs.kienyeji;
+                    totalPrice = traysKienyeji * pricePerTrayKienyeji;
+                    usePerBird = false;
                     document.getElementById('estimatedPrice').innerHTML = `
                         <div style="text-align: left;">
-                            <div>Total: Ksh ${totalPrice.toLocaleString()}</div>
-                            <div style="color: #2c5530; font-weight: bold;">Deposit Required: Ksh ${depositAmount.toLocaleString()}</div>
-                            <div style="font-size: 0.9rem; opacity: 0.8;">Remaining: Ksh ${(totalPrice - depositAmount).toLocaleString()} on delivery</div>
+                            <div>${traysKienyeji} tray(s) × 30 eggs = ${quantity} eggs</div>
+                            <div style="font-size: 1.2rem; font-weight: bold; margin-top: 10px;">Total: Ksh ${totalPrice.toLocaleString()}</div>
+                            <div style="color: var(--secondary-color); font-weight: 600; margin-top: 8px;">
+                                <i class="fas fa-info-circle"></i> Deposit Required: Ksh ${Math.round(totalPrice * 0.5).toLocaleString()} (50%)
+                            </div>
+                            <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">
+                                Balance on delivery: Ksh ${Math.round(totalPrice * 0.5).toLocaleString()}
+                            </div>
                         </div>
                     `;
                     document.getElementById('priceEstimate').style.display = 'block';
                     return;
-                } else {
-                    document.getElementById('priceEstimate').innerHTML = `
-                        <h4 style="color: #e74c3c;">Minimum Order: 100 birds</h4>
-                        <small style="color: #e74c3c;">Slaughter service requires minimum 100 birds.</small>
+                case 'eggs-broiler':
+                    // Assuming eggs are sold by tray (30 eggs per tray)
+                    const traysBroiler = Math.ceil(quantity / 30);
+                    const pricePerTrayBroiler = PRICING_CONFIG.eggs.broiler;
+                    totalPrice = traysBroiler * pricePerTrayBroiler;
+                    usePerBird = false;
+                    document.getElementById('estimatedPrice').innerHTML = `
+                        <div style="text-align: left;">
+                            <div>${traysBroiler} tray(s) × 30 eggs = ${quantity} eggs</div>
+                            <div style="font-size: 1.2rem; font-weight: bold; margin-top: 10px;">Total: Ksh ${totalPrice.toLocaleString()}</div>
+                            <div style="color: var(--secondary-color); font-weight: 600; margin-top: 8px;">
+                                <i class="fas fa-info-circle"></i> Deposit Required: Ksh ${Math.round(totalPrice * 0.5).toLocaleString()} (50%)
+                            </div>
+                            <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">
+                                Balance on delivery: Ksh ${Math.round(totalPrice * 0.5).toLocaleString()}
+                            </div>
+                        </div>
                     `;
                     document.getElementById('priceEstimate').style.display = 'block';
                     return;
-                }
-                break;
+            }
         }
         
         if (!usePerBird) {
@@ -886,7 +1042,6 @@ function handleEmailOrderSubmit(e) {
         customerEmail: currentUser.email,
         orderType: formData.get('orderType'),
         quantity: formData.get('quantity'),
-        weight: formData.get('weight'),
         deliveryLocation: formData.get('deliveryLocation'),
         deliveryDate: formData.get('deliveryDate'),
         specialInstructions: formData.get('specialInstructions')
@@ -963,47 +1118,106 @@ function sendOrderEmail(orderDetails) {
     let totalPrice = 0;
     let depositAmount = 0;
     let priceCalculation = '';
+    let productName = '';
     
     const quantity = parseInt(orderDetails.quantity);
-    const weight = parseFloat(orderDetails.weight) || (quantity * 2);
     
-    switch (orderDetails.orderType) {
-        case 'live':
-            totalPrice = Math.round(weight * 800);
-            priceCalculation = `${weight}kg × Ksh 800/kg`;
+    // Check if it's a new product type using the mapping
+    if (ORDER_TYPE_MAPPING[orderDetails.orderType]) {
+        const mapping = ORDER_TYPE_MAPPING[orderDetails.orderType];
+        
+        if (mapping.category === 'kienyeji') {
+            if (mapping.type === 'bulk') {
+                const bulkPrice = PRICING_CONFIG.kienyeji.bulk;
+                totalPrice = quantity * bulkPrice;
+                priceCalculation = `${quantity} birds × Ksh ${bulkPrice.toLocaleString()} each (Bulk rate)`;
+                productName = 'Bulk Kienyeji Order';
+            } else {
+                const price = PRICING_CONFIG.kienyeji[mapping.type][mapping.processing];
+                totalPrice = quantity * price;
+                const typeText = mapping.type === 'jogoo' ? 'Jogoo (Roosters)' : 
+                               mapping.type === 'hensPremium' ? 'Hens (Premium)' : 'Hens';
+                const processingText = mapping.processing === 'live' ? 'Live' : 'Slaughtered & Cleaned';
+                priceCalculation = `${quantity} birds × Ksh ${price.toLocaleString()} each`;
+                productName = `${processingText} ${typeText}`;
+            }
             depositAmount = Math.round(totalPrice * 0.5);
-            break;
-        case 'cleaned':
-            totalPrice = Math.round(weight * 900);
-            priceCalculation = `${weight}kg × Ksh 900/kg`;
-            depositAmount = Math.round(totalPrice * 0.5);
-            break;
-        case 'bulk':
-            const bulkRate = quantity >= 10 ? 750 : 800;
-            totalPrice = Math.round(weight * bulkRate);
-            priceCalculation = `${weight}kg × Ksh ${bulkRate}/kg (Bulk rate)`;
-            depositAmount = Math.round(totalPrice * 0.5);
-            break;
-        case 'bulk-100':
-            if (quantity >= 100) {
-                totalPrice = quantity * 1000;
-                priceCalculation = `${quantity} birds × Ksh 1,000 each`;
+        }
+    } else {
+        // Handle legacy and other product types
+        switch (orderDetails.orderType) {
+            // Legacy Kienyeji Products - use new pricing
+            case 'live-kienyeji':
+                const liveKienyejiPrice = PRICING_CONFIG.kienyeji.hens.live;
+                totalPrice = quantity * liveKienyejiPrice;
+                priceCalculation = `${quantity} birds × Ksh ${liveKienyejiPrice.toLocaleString()} each`;
                 depositAmount = Math.round(totalPrice * 0.5);
-            }
-            break;
-        case 'slaughter':
-            if (quantity >= 100) {
-                totalPrice = quantity * 1000;
-                depositAmount = Math.round(totalPrice * 0.5); // Already 50% for slaughter
-                priceCalculation = `${quantity} birds × Ksh 1,000 each (Slaughter service)`;
-            }
-            break;
-        default:
-            console.error('Invalid order type:', orderDetails.orderType);
-            alert('Please select a valid order type.');
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-            return;
+                productName = 'Live Kienyeji Hens';
+                break;
+            case 'cleaned-kienyeji':
+                const cleanedKienyejiPrice = PRICING_CONFIG.kienyeji.hens.cleaned;
+                totalPrice = quantity * cleanedKienyejiPrice;
+                priceCalculation = `${quantity} birds × Ksh ${cleanedKienyejiPrice.toLocaleString()} each`;
+                depositAmount = Math.round(totalPrice * 0.5);
+                productName = 'Slaughtered & Cleaned Kienyeji Hens';
+                break;
+            case 'bulk-kienyeji':
+                const bulkKienyejiPrice = PRICING_CONFIG.kienyeji.bulk.hens;
+                totalPrice = quantity * bulkKienyejiPrice;
+                priceCalculation = `${quantity} birds × Ksh ${bulkKienyejiPrice.toLocaleString()} each (Bulk rate)`;
+                depositAmount = Math.round(totalPrice * 0.5);
+                productName = 'Bulk Kienyeji Order';
+                break;
+            
+            // Broiler Products
+            case 'live-broiler':
+                const liveBroilerPrice = PRICING_CONFIG.broiler.chickens.live;
+                totalPrice = quantity * liveBroilerPrice;
+                priceCalculation = `${quantity} birds × Ksh ${liveBroilerPrice.toLocaleString()} each`;
+                depositAmount = Math.round(totalPrice * 0.5);
+                productName = 'Live Broiler Chicken';
+                break;
+            case 'cleaned-broiler':
+                const cleanedBroilerPrice = PRICING_CONFIG.broiler.chickens.cleaned;
+                totalPrice = quantity * cleanedBroilerPrice;
+                priceCalculation = `${quantity} birds × Ksh ${cleanedBroilerPrice.toLocaleString()} each`;
+                depositAmount = Math.round(totalPrice * 0.5);
+                productName = 'Slaughtered & Cleaned Broiler';
+                break;
+            case 'bulk-broiler':
+                const bulkBroilerPrice = PRICING_CONFIG.broiler.bulk;
+                totalPrice = quantity * bulkBroilerPrice;
+                priceCalculation = `${quantity} birds × Ksh ${bulkBroilerPrice.toLocaleString()} each (Bulk rate)`;
+                depositAmount = Math.round(totalPrice * 0.5);
+                productName = 'Bulk Broiler Order';
+                break;
+            
+            // Egg Products
+            case 'eggs-kienyeji':
+                // Assuming eggs are sold by tray (30 eggs per tray)
+                const traysKienyeji = Math.ceil(quantity / 30);
+                const trayPriceKienyeji = PRICING_CONFIG.eggs.kienyeji;
+                totalPrice = traysKienyeji * trayPriceKienyeji;
+                priceCalculation = `${traysKienyeji} tray(s) × 30 eggs = ${quantity} eggs at Ksh ${trayPriceKienyeji}/tray`;
+                depositAmount = Math.round(totalPrice * 0.5);
+                productName = 'Kienyeji Eggs';
+                break;
+            case 'eggs-broiler':
+                // Assuming eggs are sold by tray (30 eggs per tray)
+                const traysBroiler = Math.ceil(quantity / 30);
+                const trayPriceBroiler = PRICING_CONFIG.eggs.broiler;
+                totalPrice = traysBroiler * trayPriceBroiler;
+                priceCalculation = `${traysBroiler} tray(s) × 30 eggs = ${quantity} eggs at Ksh ${trayPriceBroiler}/tray`;
+                depositAmount = Math.round(totalPrice * 0.5);
+                productName = 'Broiler Layers Eggs';
+                break;
+            default:
+                console.error('Invalid order type:', orderDetails.orderType);
+                alert('Please select a valid order type.');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                return;
+        }
     }
     
     // Prepare email template parameters (matching your template structure)
@@ -1018,9 +1232,11 @@ function sendOrderEmail(orderDetails) {
         customer_phone: orderDetails.customerPhone,
         order_id: `KF-${Date.now()}`,
         product_name: getOrderTypeText(orderDetails.orderType),
-        product_image: 'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=64&h=64&fit=crop&crop=center',
+        product_image: (orderDetails.orderType.includes('eggs')) ? 
+            'https://images.unsplash.com/photo-1603569283847-aa40cc0b1420?w=64&h=64&fit=crop&crop=center' : 
+            'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=64&h=64&fit=crop&crop=center',
         quantity: orderDetails.quantity,
-        unit: 'chickens',
+        unit: (orderDetails.orderType.includes('eggs')) ? 'eggs' : 'chickens',
         price: totalPrice.toLocaleString(),
         delivery_cost: '0', // Free delivery or set actual cost
         total_amount: totalPrice.toLocaleString(),
@@ -1058,7 +1274,7 @@ function sendOrderEmail(orderDetails) {
                 order_id: `KF-${Date.now()}`,
                 product_name: getOrderTypeText(orderDetails.orderType),
                 quantity: orderDetails.quantity,
-                unit: 'chickens',
+                unit: (orderDetails.orderType.includes('eggs')) ? 'eggs' : 'chickens',
                 price: totalPrice.toLocaleString(),
                 delivery_cost: '0',
                 total_amount: totalPrice.toLocaleString(),
@@ -1067,7 +1283,9 @@ function sendOrderEmail(orderDetails) {
                 farm_phone: '+254769583063',
                 farm_email: 'kienyejifreshfarm@gmail.com',
                 special_instructions: orderDetails.specialInstructions || 'None',
-                message: `Thank you for your order! We will contact you soon to confirm and arrange delivery of your fresh Kienyeji chicken.`
+                message: (orderDetails.orderType.includes('eggs')) ? 
+                    `Thank you for your order! We will contact you soon to confirm and arrange delivery of your fresh eggs.` : 
+                    `Thank you for your order! We will contact you soon to confirm and arrange delivery of your fresh chicken.`
             };
             
             // Send customer confirmation (using the correct template ID)
@@ -1110,24 +1328,44 @@ function isValidEmail(email) {
 
 function getOrderTypeText(orderType) {
     switch (orderType) {
-        case 'live': return 'Live Chicken (Ksh 800/kg)';
-        case 'cleaned': return 'Slaughtered & Cleaned (Ksh 900/kg)';
-        case 'bulk': return 'Bulk Order (10+ birds - Special rates)';
-        case 'bulk-100': return 'Large Bulk Order (100+ birds - Ksh 1,000 each)';
-        case 'slaughter': return 'Bulk Order with Slaughter Service (50% deposit required)';
-        default: return 'Kienyeji Chicken Order';
+        // New Kienyeji Products
+        case 'live-jogoo-kienyeji': return 'Live Jogoo (Roosters) - Ksh 1,500/bird';
+        case 'live-hens-kienyeji': return 'Live Hens (Standard) - Ksh 1,200/bird';
+        case 'live-hens-premium-kienyeji': return 'Live Hens (Premium) - Ksh 1,300/bird';
+        case 'cleaned-jogoo-kienyeji': return 'Slaughtered & Cleaned Jogoo - Ksh 1,500/bird';
+        case 'cleaned-hens-kienyeji': return 'Slaughtered & Cleaned Hens - Ksh 1,200/bird';
+        case 'cleaned-hens-premium-kienyeji': return 'Slaughtered & Cleaned Hens (Premium) - Ksh 1,300/bird';
+        case 'bulk-kienyeji': return 'Bulk Kienyeji Order - Ksh 1,000/bird';
+        case 'bulk-hens-kienyeji': return 'Bulk Kienyeji Hens - Ksh 1,000/bird';
+        case 'bulk-jogoo-kienyeji': return 'Bulk Kienyeji Jogoo - Ksh 1,300/bird';
+        
+        // Broiler Products
+        case 'live-broiler': return 'Live Broiler Chicken (Ksh 1,000/bird)';
+        case 'cleaned-broiler': return 'Slaughtered & Cleaned Broiler (Ksh 1,000/bird)';
+        case 'bulk-broiler': return 'Bulk Broiler Order (Ksh 900/bird)';
+        
+        // Legacy Kienyeji Products (for backward compatibility)
+        case 'live-kienyeji': return 'Live Kienyeji Hens - Ksh 1,200/bird';
+        case 'cleaned-kienyeji': return 'Slaughtered & Cleaned Kienyeji Hens - Ksh 1,200/bird';
+        
+
+        
+        // Egg Products
+        case 'eggs-kienyeji': return 'Kienyeji Eggs (Ksh 900/tray)';
+        case 'eggs-broiler': return 'Broiler Layers Eggs (Ksh 400/tray)';
+        
+        default: return 'Kienyeji Farm Order';
     }
 }
 
 function formatDate(dateString) {
     const date = new Date(dateString);
-    const options = { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-    };
-    return date.toLocaleDateString('en-US', options);
+    return date.toLocaleDateString('en-GB', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
 }
 
 // Product order type selection function
@@ -1147,9 +1385,23 @@ function selectOrderType(orderType) {
         if (orderTypeSelect) {
             // Map product types to form values
             const typeMapping = {
-                'live': 'live',
-                'cleaned': 'cleaned', 
-                'bulk': 'bulk'
+                'live-jogoo-kienyeji': 'live-jogoo-kienyeji',
+                'live-hens-kienyeji': 'live-hens-kienyeji',
+                'live-hens-premium-kienyeji': 'live-hens-premium-kienyeji',
+                'cleaned-jogoo-kienyeji': 'cleaned-jogoo-kienyeji',
+                'cleaned-hens-kienyeji': 'cleaned-hens-kienyeji',
+                'cleaned-hens-premium-kienyeji': 'cleaned-hens-premium-kienyeji',
+                'bulk-kienyeji': 'bulk-hens-kienyeji',
+                'bulk-hens-kienyeji': 'bulk-hens-kienyeji',
+                'bulk-jogoo-kienyeji': 'bulk-jogoo-kienyeji',
+                'eggs-kienyeji': 'eggs-kienyeji',
+                'live-broiler': 'live-broiler',
+                'cleaned-broiler': 'cleaned-broiler',
+                'bulk-broiler': 'bulk-broiler',
+                'eggs-broiler': 'eggs-broiler',
+                // Legacy support
+                'live-kienyeji': 'live-hens-kienyeji',
+                'cleaned-kienyeji': 'cleaned-hens-kienyeji'
             };
             
             // Set the order type
@@ -1172,14 +1424,54 @@ function selectOrderType(orderType) {
             if (messageField) {
                 let preMessage = '';
                 switch(orderType) {
-                    case 'live':
-                        preMessage = 'I am interested in ordering live Kienyeji chicken. Please provide availability, pricing, and delivery details. I understand a 50% deposit is required before processing.';
+                    case 'live-jogoo-kienyeji':
+                        preMessage = 'I am interested in ordering live Jogoo (Roosters) at Ksh 1,500 per bird. Please provide availability and delivery details. I understand a 50% deposit is required before processing.';
                         break;
-                    case 'cleaned':
-                        preMessage = 'I would like to order slaughtered and cleaned Kienyeji chicken. Please provide pricing, processing time, and delivery information. I understand a 50% deposit is required before processing.';
+                    case 'live-hens-kienyeji':
+                        preMessage = 'I am interested in ordering live Kienyeji Hens at Ksh 1,200 per bird. Please provide availability and delivery details. I understand a 50% deposit is required before processing.';
                         break;
-                    case 'bulk':
-                        preMessage = 'I need a bulk quote for Kienyeji chickens. Please provide special pricing for bulk orders and delivery options. I understand a 50% deposit is required before processing begins.';
+                    case 'live-hens-premium-kienyeji':
+                        preMessage = 'I am interested in ordering live Premium Kienyeji Hens at Ksh 1,300 per bird. Please provide availability and delivery details. I understand a 50% deposit is required before processing.';
+                        break;
+                    case 'cleaned-jogoo-kienyeji':
+                        preMessage = 'I would like to order slaughtered and cleaned Jogoo (Roosters) at Ksh 1,500 per bird. Please provide processing time and delivery information. I understand a 50% deposit is required before processing.';
+                        break;
+                    case 'cleaned-hens-kienyeji':
+                        preMessage = 'I would like to order slaughtered and cleaned Kienyeji Hens at Ksh 1,200 per bird. Please provide processing time and delivery information. I understand a 50% deposit is required before processing.';
+                        break;
+                    case 'cleaned-hens-premium-kienyeji':
+                        preMessage = 'I would like to order slaughtered and cleaned Premium Kienyeji Hens at Ksh 1,300 per bird. Please provide processing time and delivery information. I understand a 50% deposit is required before processing.';
+                        break;
+                    case 'bulk-kienyeji':
+                        preMessage = 'I need a bulk quote for Kienyeji chickens at Ksh 1,000 per bird. Please provide availability and delivery options. I understand a 50% deposit is required before processing begins.';
+                        break;
+                    case 'eggs-kienyeji':
+                        preMessage = 'I would like to order Kienyeji eggs at Ksh 900 per tray. Please provide availability and delivery details. I understand a 50% deposit is required before processing.';
+                        break;
+                    case 'bulk-hens-kienyeji':
+                        preMessage = 'I need a bulk quote for Kienyeji Hens at Ksh 1,000 per bird. Please provide availability and delivery options. I understand a 50% deposit is required before processing begins.';
+                        break;
+                    case 'bulk-jogoo-kienyeji':
+                        preMessage = 'I need a bulk quote for Kienyeji Jogoo at Ksh 1,300 per bird. Please provide availability and delivery options. I understand a 50% deposit is required before processing begins.';
+                        break;
+                    case 'live-broiler':
+                        preMessage = 'I am interested in ordering live Broiler chickens at Ksh 1,000 per bird. Please provide availability and delivery details. I understand a 50% deposit is required before processing.';
+                        break;
+                    case 'cleaned-broiler':
+                        preMessage = 'I would like to order slaughtered and cleaned Broiler chickens at Ksh 1,000 per bird. Please provide processing time and delivery information. I understand a 50% deposit is required before processing.';
+                        break;
+                    case 'bulk-broiler':
+                        preMessage = 'I need a bulk quote for Broiler chickens at Ksh 900 per bird. Please provide availability and delivery options for 50+ birds. I understand a 50% deposit is required before processing begins.';
+                        break;
+                    case 'eggs-broiler':
+                        preMessage = 'I would like to order Broiler Layers eggs at Ksh 400 per tray. Please provide availability and delivery details. I understand a 50% deposit is required before processing.';
+                        break;
+                    // Legacy support
+                    case 'live-kienyeji':
+                        preMessage = 'I am interested in ordering live Kienyeji Hens at Ksh 1,200 per bird. Please provide availability and delivery details. I understand a 50% deposit is required before processing.';
+                        break;
+                    case 'cleaned-kienyeji':
+                        preMessage = 'I would like to order slaughtered and cleaned Kienyeji Hens at Ksh 1,200 per bird. Please provide processing time and delivery information. I understand a 50% deposit is required before processing.';
                         break;
                 }
                 messageField.value = preMessage;

@@ -150,7 +150,7 @@ contactForm.addEventListener('submit', function(e) {
     const message = formData.get('message');
     
     // Create WhatsApp message for all order types
-    let whatsappMessage = `Hi! I'm interested in ordering from Kienyeji Fresh Farm.\n\n`;
+    let whatsappMessage = `Hi! I'm interested in ordering from Improved Kienyeji Fresh Farm.\n\n`;
     whatsappMessage += `Name: ${name}\n`;
     whatsappMessage += `Phone: ${phone}\n`;
     if (email) whatsappMessage += `Email: ${email}\n`;
@@ -501,7 +501,7 @@ contactForm.addEventListener('submit', function(e) {
 
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Kienyeji Farm website loaded successfully!');
+    console.log('Improved Kienyeji Farm website loaded successfully!');
     
     // Initialize EmailJS with error handling
     try {
@@ -547,11 +547,8 @@ document.addEventListener('DOMContentLoaded', () => {
     addChickenSoundEffects();
     
     // Show welcome message in console
-    console.log('%c🐔 Welcome to Kienyeji Farm! ', 'background: #2c5530; color: white; padding: 5px 10px; border-radius: 3px;');
-    console.log('%c🎄 Merry Christmas & Happy New Year! 🎊', 'background: #c41e3a; color: white; padding: 5px 10px; border-radius: 3px;');
-    
-    // Add Christmas magic
-    addChristmasEffects();
+    console.log('%c🐔 Welcome to Improved Kienyeji Farm! ', 'background: #2c5530; color: white; padding: 5px 10px; border-radius: 3px;');
+
     
     // Test EmailJS connectivity
     setTimeout(() => {
@@ -665,106 +662,11 @@ if (!document.getElementById('ripple-animation')) {
     document.head.appendChild(style);
 }
 
-// Christmas Effects Function
-function addChristmasEffects() {
-    // Add floating Christmas emojis
-    const christmasEmojis = ['🎄', '🎅', '🤶', '🎁', '⭐', '❄️', '🔔', '🕯️', '🦌', '☃️'];
-    
-    setInterval(() => {
-        const emoji = document.createElement('div');
-        emoji.textContent = christmasEmojis[Math.floor(Math.random() * christmasEmojis.length)];
-        emoji.style.cssText = `
-            position: fixed;
-            font-size: ${Math.random() * 15 + 20}px;
-            left: ${Math.random() * window.innerWidth}px;
-            top: ${window.innerHeight + 50}px;
-            pointer-events: none;
-            z-index: 1000;
-            opacity: 0.6;
-            animation: christmasFloat ${Math.random() * 8 + 12}s linear infinite;
-        `;
-        
-        document.body.appendChild(emoji);
-        
-        // Remove after animation
-        setTimeout(() => {
-            if (emoji.parentNode) {
-                emoji.parentNode.removeChild(emoji);
-            }
-        }, 20000);
-    }, 3000);
-    
-    // Add Christmas sparkles on click
-    document.addEventListener('click', (e) => {
-        createChristmasSparkle(e.clientX, e.clientY);
-    });
-}
 
-// Create Christmas sparkle effect
-function createChristmasSparkle(x, y) {
-    const sparkles = ['✨', '⭐', '🌟', '💫'];
-    
-    for (let i = 0; i < 5; i++) {
-        setTimeout(() => {
-            const sparkle = document.createElement('div');
-            sparkle.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
-            sparkle.style.cssText = `
-                position: fixed;
-                left: ${x + (Math.random() - 0.5) * 100}px;
-                top: ${y + (Math.random() - 0.5) * 100}px;
-                font-size: ${Math.random() * 10 + 15}px;
-                pointer-events: none;
-                z-index: 9999;
-                animation: sparkleEffect 1.5s ease-out forwards;
-            `;
-            
-            document.body.appendChild(sparkle);
-            
-            setTimeout(() => {
-                if (sparkle.parentNode) {
-                    sparkle.parentNode.removeChild(sparkle);
-                }
-            }, 1500);
-        }, i * 100);
-    }
-}
 
-// Add Christmas animation CSS
-if (!document.getElementById('christmas-animations')) {
-    const style = document.createElement('style');
-    style.id = 'christmas-animations';
-    style.textContent = `
-        @keyframes christmasFloat {
-            from {
-                transform: translateY(0) rotate(0deg);
-                opacity: 0.6;
-            }
-            50% {
-                opacity: 0.3;
-            }
-            to {
-                transform: translateY(-${window.innerHeight + 100}px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-        
-        @keyframes sparkleEffect {
-            0% {
-                transform: scale(0) rotate(0deg);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.2) rotate(180deg);
-                opacity: 0.8;
-            }
-            100% {
-                transform: scale(0) rotate(360deg);
-                opacity: 0;
-            }
-        }
-    `;
-    document.head.appendChild(style);
-}
+
+
+
 
 // Global variables for user authentication
 let currentUser = null;

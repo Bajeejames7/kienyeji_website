@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Egg Pricing Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .test-case { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .pass { background-color: #d4edda; border-color: #c3e6cb; }
+        .fail { background-color: #f8d7da; border-color: #f5c6cb; }
+        .form-group { margin: 10px 0; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        select, input { padding: 8px; width: 200px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .result { margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>Egg Pricing Test</h1>
+    <p>Test the new egg pricing logic where quantity represents number of trays.</p>
+
+    <div class="form-group">
+        <label for="orderType">Order Type:</label>
+        <select id="orderType">
+            <option value="eggs-kienyeji">Kienyeji Eggs (Ksh 900/tray)</option>
+            <option value="eggs-broiler">Broiler Eggs (Ksh 400/tray)</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="quantity">Number of Trays:</label>
+        <input type="number" id="quantity" min="1" value="1">
+    </div>
+
+    <button onclick="calculateTestPrice()">Calculate Price</button>
+
+    <div id="result" class="result" style="display: none;"></div>
+
+    <h2>Automated Test Cases</h2>
+    <div id="testResults"></div>
+
+    <script>
+        // Pricing configuration
+        const PRICING_CONFIG = {
+            eggs: {
+                kienyeji: 900,
+                broiler: 400
+            }
+        };
+
+        function calculateTestPrice() {
+            const orderType = document.getElementById('orderType').value;
+            const quantity = parseInt(document.getElementById('quantity').value) || 0;
+            
+            let price = 0;
+            let calculation = '';
+            
+            if (orderType === 'eggs-kienyeji') {
+                price = quantity * PRICING_CONFIG.eggs.kienyeji;
+                calculation = `${quantity} tray(s) × Ksh ${PRICING_CONFIG.eggs.kienyeji}/tray = Ksh ${price}`;
+            } else if (orderType === 'eggs-broiler') {
+                price = quantity * PRICING_CONFIG.eggs.broiler;
+                calculation = `${quantity} tray(s) × Ksh ${PRICING_CONFIG.eggs.broiler}/tray = Ksh ${price}`;
+            }
+            
+            const totalEggs = quantity * 30;
+            const deposit = Math.round(price * 0.5);
+            
+            document.getElementById('result').innerHTML = `
+                <h3>Price Calculation</h3>
+                <p><strong>Calculation:</strong> ${calculation}</p>
+                <p><strong>Total Eggs:</strong> ${totalEggs} eggs</p>
+                <p><strong>Total Price:</strong> Ksh ${price.toLocaleString()}</p>
+                <p><strong>Deposit (50%):</strong> Ksh ${deposit.toLocaleString()}</p>
+                <p><strong>Balance:</strong> Ksh ${(price - deposit).toLocaleString()}</p>
+            `;
+            document.getElementById('result').style.display = 'block';
+        }
+
+        // Run automated tests
+        function runTests() {
+            const testCases = [
+                { type: 'eggs-kienyeji', qty: 1, expected: 900, name: 'Kienyeji Eggs - 1 tray' },
+                { type: 'eggs-kienyeji', qty: 10, expected: 9000, name: 'Kienyeji Eggs - 10 trays' },
+                { type: 'eggs-broiler', qty: 1, expected: 400, name: 'Broiler Eggs - 1 tray' },
+                { type: 'eggs-broiler', qty: 10, expected: 4000, name: 'Broiler Eggs - 10 trays' }
+            ];
+
+            let results = '';
+            let passed = 0;
+            let failed = 0;
+
+            testCases.forEach(test => {
+                let price = 0;
+                if (test.type === 'eggs-kienyeji') {
+                    price = test.qty * PRICING_CONFIG.eggs.kienyeji;
+                } else if (test.type === 'eggs-broiler') {
+                    price = test.qty * PRICING_CONFIG.eggs.broiler;
+                }
+
+                const success = price === test.expected;
+                if (success) passed++;
+                else failed++;
+
+                results += `
+                    <div class="test-case ${success ? 'pass' : 'fail'}">
+                        <strong>${test.name}</strong><br>
+                        Expected: Ksh ${test.expected.toLocaleString()}<br>
+                        Got: Ksh ${price.toLocaleString()}<br>
+                        ${success ? '✅ PASS' : '❌ FAIL'}
+                    </div>
+                `;
+            });
+
+            results = `<h3>Test Summary: ${passed} passed, ${failed} failed</h3>` + results;
+            document.getElementById('testResults').innerHTML = results;
+        }
+
+        // Run tests on page load
+        window.onload = runTests;
+        
+        // Test the main website integration
+        function testMainWebsiteIntegration() {
+            console.log('Testing main website egg pricing integration...');
+            
+            // Test cases for main website
+            const testCases = [
+                { orderType: 'eggs-kienyeji', quantity: 1, expectedPrice: 900 },
+                { orderType: 'eggs-kienyeji', quantity: 10, expectedPrice: 9000 },
+                { orderType: 'eggs-broiler', quantity: 1, expectedPrice: 400 },
+                { orderType: 'eggs-broiler', quantity: 10, expectedPrice: 4000 }
+            ];
+            
+            testCases.forEach(test => {
+                console.log(`Testing ${test.orderType} with quantity ${test.quantity}:`);
+                console.log(`Expected: Ksh ${test.expectedPrice.toLocaleString()}`);
+                console.log(`Calculation: ${test.quantity} tray(s) × Ksh ${test.orderType === 'eggs-kienyeji' ? 900 : 400}/tray`);
+                console.log('---');
+            });
+        }
+        
+        // Run integration test
+        setTimeout(testMainWebsiteIntegration, 1000);
+    </script>
+</body>
+</html>

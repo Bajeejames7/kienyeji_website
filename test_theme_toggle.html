@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Toggle Test</title>
+    <link rel="stylesheet" href="docs/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Theme Toggle Test</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <button id="themeToggle" class="theme-toggle" title="Toggle dark/light mode">
+                        <i class="fas fa-moon" id="themeIcon"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div style="padding: 100px 20px; text-align: center;">
+        <h1>Theme Toggle Test</h1>
+        <p>Click the theme toggle button in the navigation to test dark/light mode switching.</p>
+        <div style="margin-top: 20px;">
+            <p>Current theme: <span id="currentTheme">Loading...</span></p>
+        </div>
+    </div>
+
+    <script src="docs/script.js"></script>
+    <script>
+        // Additional test script to show current theme
+        function updateThemeDisplay() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const themeDisplay = document.getElementById('currentTheme');
+            if (themeDisplay) {
+                themeDisplay.textContent = currentTheme || 'Not set';
+            }
+        }
+        
+        // Update display on load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateThemeDisplay();
+            
+            // Watch for theme changes
+            const observer = new MutationObserver(() => {
+                updateThemeDisplay();
+            });
+            
+            observer.observe(document.documentElement, {
+                attributes: true,
+                attributeFilter: ['data-theme']
+            });
+        });
+    </script>
+</body>
+</html>

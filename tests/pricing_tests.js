@@ -48,8 +48,8 @@ function calculateTestPrice(orderType, quantity) {
                 return quantity * PRICING_CONFIG.kienyeji[mapping.type][mapping.processing];
             }
         } else if (mapping.category === 'eggs') {
-            const trays = Math.ceil(quantity / 30);
-            return trays * PRICING_CONFIG.eggs[mapping.type];
+            // Quantity represents number of trays directly
+            return quantity * PRICING_CONFIG.eggs[mapping.type];
         }
     }
     return 0;
@@ -141,22 +141,28 @@ class PricingTestSuite {
             this.assertEqual(price, 50000, 'Bulk Kienyeji: 50 birds × 1000 = 50000');
         });
 
-        // Test 8: Kienyeji Eggs Pricing (exact trays)
-        this.test('Kienyeji eggs pricing - exact trays', () => {
-            const price = calculateTestPrice('eggs-kienyeji', 60); // 2 trays
+        // Test 8: Kienyeji Eggs Pricing (2 trays)
+        this.test('Kienyeji eggs pricing - 2 trays', () => {
+            const price = calculateTestPrice('eggs-kienyeji', 2); // 2 trays
             this.assertEqual(price, 1800, 'Kienyeji Eggs: 2 trays × 900 = 1800');
         });
 
-        // Test 9: Kienyeji Eggs Pricing (partial tray)
-        this.test('Kienyeji eggs pricing - partial tray', () => {
-            const price = calculateTestPrice('eggs-kienyeji', 45); // 1.5 trays = 2 trays
-            this.assertEqual(price, 1800, 'Kienyeji Eggs: 45 eggs = 2 trays × 900 = 1800');
+        // Test 9: Kienyeji Eggs Pricing (10 trays)
+        this.test('Kienyeji eggs pricing - 10 trays', () => {
+            const price = calculateTestPrice('eggs-kienyeji', 10); // 10 trays
+            this.assertEqual(price, 9000, 'Kienyeji Eggs: 10 trays × 900 = 9000');
         });
 
-        // Test 10: Broiler Eggs Pricing
+        // Test 10: Broiler Eggs Pricing (3 trays)
         this.test('Broiler eggs pricing calculation', () => {
-            const price = calculateTestPrice('eggs-broiler', 90); // 3 trays
+            const price = calculateTestPrice('eggs-broiler', 3); // 3 trays
             this.assertEqual(price, 1200, 'Broiler Eggs: 3 trays × 400 = 1200');
+        });
+
+        // Test 10b: Broiler Eggs Pricing (10 trays)
+        this.test('Broiler eggs pricing - 10 trays', () => {
+            const price = calculateTestPrice('eggs-broiler', 10); // 10 trays
+            this.assertEqual(price, 4000, 'Broiler Eggs: 10 trays × 400 = 4000');
         });
 
         // Test 11: getOrderTypeText for Live Jogoo

@@ -16,72 +16,90 @@ document.querySelectorAll('.nav-link').forEach(link => {
 });
 
 // Theme Toggle Functionality
-const themeToggle = document.getElementById('themeToggle');
-const themeIcon = document.getElementById('themeIcon');
-const html = document.documentElement;
+document.addEventListener('DOMContentLoaded', function() {
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const html = document.documentElement;
 
-// Check for saved theme preference or default to 'light'
-const currentTheme = localStorage.getItem('theme') || 'light';
-html.setAttribute('data-theme', currentTheme);
+    // Get theme from localStorage or default to dark
+    let currentTheme = localStorage.getItem('theme') || 'dark';
+    html.setAttribute('data-theme', currentTheme);
+    localStorage.setItem('theme', currentTheme);
 
-// Update icon based on current theme
-function updateThemeIcon(theme) {
-    if (theme === 'dark') {
-        themeIcon.className = 'fas fa-sun';
-        themeToggle.title = 'Switch to light mode';
-    } else {
-        themeIcon.className = 'fas fa-moon';
-        themeToggle.title = 'Switch to dark mode';
-    }
-}
-
-// Initialize icon
-updateThemeIcon(currentTheme);
-
-// Function to update navbar background based on theme and scroll position
-function updateNavbarBackground() {
-    const navbar = document.querySelector('.navbar');
-    const isDarkTheme = document.documentElement.getAttribute('data-theme') === 'dark';
-    
-    if (window.scrollY > 100) {
-        if (isDarkTheme) {
-            navbar.style.background = 'rgba(26, 26, 26, 0.98)';
-        } else {
-            navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+    // Update icon based on current theme
+    function updateThemeIcon(theme) {
+        if (themeToggle && themeIcon) {
+            if (theme === 'dark') {
+                themeIcon.className = 'fas fa-sun';
+                themeToggle.title = 'Switch to light mode';
+            } else {
+                themeIcon.className = 'fas fa-moon';
+                themeToggle.title = 'Switch to dark mode';
+            }
         }
-        navbar.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.1)';
-    } else {
-        if (isDarkTheme) {
-            navbar.style.background = 'rgba(26, 26, 26, 0.95)';
-        } else {
-            navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-        }
-        navbar.style.boxShadow = 'none';
     }
-}
 
-// Theme toggle event listener
-themeToggle.addEventListener('click', () => {
-    const currentTheme = html.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
-    html.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    updateThemeIcon(newTheme);
-    
-    // Update navbar background immediately after theme change
-    updateNavbarBackground();
-    
-    // Add a subtle animation effect
-    themeToggle.style.transform = 'rotate(360deg)';
-    setTimeout(() => {
-        themeToggle.style.transform = 'rotate(0deg)';
-    }, 300);
-});
+    // Initialize icon
+    updateThemeIcon(currentTheme);
 
-// Navbar scroll effect
-window.addEventListener('scroll', () => {
-    updateNavbarBackground();
+    // Debug logging
+    console.log('Theme initialized:', currentTheme);
+    console.log('HTML data-theme:', html.getAttribute('data-theme'));
+
+    // Function to update navbar background based on theme and scroll position
+    function updateNavbarBackground() {
+        const navbar = document.querySelector('.navbar');
+        const isDarkTheme = document.documentElement.getAttribute('data-theme') === 'dark';
+        
+        if (window.scrollY > 100) {
+            if (isDarkTheme) {
+                navbar.style.background = 'rgba(26, 26, 26, 0.98)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+            }
+            navbar.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.1)';
+        } else {
+            if (isDarkTheme) {
+                navbar.style.background = 'rgba(26, 26, 26, 0.95)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+            }
+            navbar.style.boxShadow = 'none';
+        }
+    }
+
+    // Theme toggle event listener
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            // Apply theme changes
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+            
+            // Update navbar background immediately after theme change
+            updateNavbarBackground();
+            
+            // Add a subtle animation effect
+            themeToggle.style.transform = 'rotate(360deg)';
+            themeToggle.style.transition = 'transform 0.3s ease';
+            setTimeout(() => {
+                themeToggle.style.transform = 'rotate(0deg)';
+            }, 300);
+            
+            // Debug logging
+            console.log('Theme switched to:', newTheme);
+        });
+    } else {
+        console.error('Theme toggle button not found');
+    }
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+        updateNavbarBackground();
+    });
 });
 
 // FAQ Accordion
@@ -191,6 +209,18 @@ contactForm.addEventListener('submit', function(e) {
         case 'eggs-kienyeji':
             orderTypeText = 'Kienyeji Eggs';
             pricingInfo = 'Ksh 900 per tray (30 eggs)';
+            break;
+        case 'live-broiler':
+            orderTypeText = 'Live Broiler Chicken';
+            pricingInfo = 'Ksh 500 per bird';
+            break;
+        case 'cleaned-broiler':
+            orderTypeText = 'Slaughtered & Cleaned Broiler';
+            pricingInfo = 'Ksh 450 per kg';
+            break;
+        case 'bulk-broiler':
+            orderTypeText = 'Bulk Broiler Order';
+            pricingInfo = 'Ksh 400 per kg';
             break;
         case 'eggs-broiler':
             orderTypeText = 'Broiler Layers Eggs';
@@ -528,6 +558,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const orderTypeSelect = document.getElementById('emailOrderType');
     
     if (quantityInput && orderTypeSelect) {
+        // Update placeholder text based on order type
+        function updateQuantityPlaceholder() {
+            const orderType = orderTypeSelect.value;
+            if (orderType.includes('eggs')) {
+                quantityInput.placeholder = 'Number of trays (30 eggs per tray)';
+            } else {
+                quantityInput.placeholder = 'Number of items';
+            }
+        }
+        
+        // Update placeholder when order type changes
+        orderTypeSelect.addEventListener('change', updateQuantityPlaceholder);
+        
         [quantityInput, orderTypeSelect].forEach(input => {
             input.addEventListener('input', calculatePrice);
             input.addEventListener('change', calculatePrice);
@@ -558,6 +601,121 @@ document.addEventListener('DOMContentLoaded', () => {
     // Mobile modal enhancements
     initializeMobileModalEnhancements();
 });
+
+// Product order type selection function with updated pricing
+function selectOrderType(orderType) {
+    // Smooth scroll to contact section
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+        contactSection.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
+    
+    // Wait for scroll to complete, then fill form
+    setTimeout(() => {
+        const orderTypeSelect = document.getElementById('orderType');
+        const messageField = document.getElementById('message');
+        
+        if (orderTypeSelect) {
+            // Map product types to form values
+            const typeMapping = {
+                'live-jogoo-kienyeji': 'live-jogoo-kienyeji',
+                'live-hens-kienyeji': 'live-hens-kienyeji',
+                'live-hens-premium-kienyeji': 'live-hens-premium-kienyeji',
+                'cleaned-jogoo-kienyeji': 'cleaned-jogoo-kienyeji',
+                'cleaned-hens-kienyeji': 'cleaned-hens-kienyeji',
+                'cleaned-hens-premium-kienyeji': 'cleaned-hens-premium-kienyeji',
+                'bulk-kienyeji': 'bulk-hens-kienyeji',
+                'bulk-hens-kienyeji': 'bulk-hens-kienyeji',
+                'bulk-jogoo-kienyeji': 'bulk-jogoo-kienyeji',
+                'eggs-kienyeji': 'eggs-kienyeji',
+                'live-broiler': 'live-broiler',
+                'cleaned-broiler': 'cleaned-broiler',
+                'bulk-broiler': 'bulk-broiler',
+                'eggs-broiler': 'eggs-broiler'
+            };
+            
+            // Set the order type
+            if (typeMapping[orderType]) {
+                orderTypeSelect.value = typeMapping[orderType];
+                
+                // Add visual highlight to show selection
+                orderTypeSelect.style.borderColor = '#2c5530';
+                orderTypeSelect.style.boxShadow = '0 0 10px rgba(44, 85, 48, 0.3)';
+                
+                // Remove highlight after 3 seconds
+                setTimeout(() => {
+                    orderTypeSelect.style.borderColor = '';
+                    orderTypeSelect.style.boxShadow = '';
+                }, 3000);
+            }
+        }
+        
+        // Pre-fill message based on order type with UPDATED PRICING
+        if (messageField) {
+            let preMessage = '';
+            switch(orderType) {
+                case 'live-jogoo-kienyeji':
+                    preMessage = 'I am interested in ordering live Jogoo (Roosters) at Ksh 1,500 per bird. Please provide availability and delivery details. I understand a 50% deposit is required before processing.';
+                    break;
+                case 'live-hens-kienyeji':
+                    preMessage = 'I am interested in ordering live Improved Kienyeji Hens at Ksh 1,200 per bird. Please provide availability and delivery details. I understand a 50% deposit is required before processing.';
+                    break;
+                case 'live-hens-premium-kienyeji':
+                    preMessage = 'I am interested in ordering live Premium Improved Kienyeji Hens at Ksh 1,300 per bird. Please provide availability and delivery details. I understand a 50% deposit is required before processing.';
+                    break;
+                case 'cleaned-jogoo-kienyeji':
+                    preMessage = 'I would like to order slaughtered and cleaned Jogoo (Roosters) at Ksh 1,500 per bird. Please provide processing time and delivery information. I understand a 50% deposit is required before processing.';
+                    break;
+                case 'cleaned-hens-kienyeji':
+                    preMessage = 'I would like to order slaughtered and cleaned Improved Kienyeji Hens at Ksh 1,200 per bird. Please provide processing time and delivery information. I understand a 50% deposit is required before processing.';
+                    break;
+                case 'cleaned-hens-premium-kienyeji':
+                    preMessage = 'I would like to order slaughtered and cleaned Premium Improved Kienyeji Hens at Ksh 1,300 per bird. Please provide processing time and delivery information. I understand a 50% deposit is required before processing.';
+                    break;
+                case 'bulk-kienyeji':
+                case 'bulk-hens-kienyeji':
+                    preMessage = 'I need a bulk quote for Improved Kienyeji chickens at Ksh 1,000 per bird. Please provide availability and delivery options for 10+ birds. I understand a 50% deposit is required before processing begins.';
+                    break;
+                case 'bulk-jogoo-kienyeji':
+                    preMessage = 'I need a bulk quote for Improved Kienyeji Jogoo at Ksh 1,300 per bird. Please provide availability and delivery options for 10+ birds. I understand a 50% deposit is required before processing begins.';
+                    break;
+                case 'eggs-kienyeji':
+                    preMessage = 'I would like to order Improved Kienyeji eggs at Ksh 900 per tray. Please provide availability and delivery options. I understand a 50% deposit is required before processing.';
+                    break;
+                // UPDATED BROILER PRICING
+                case 'live-broiler':
+                    preMessage = 'I am interested in ordering live Broiler chickens at Ksh 500 per bird. Please provide availability and delivery details for 10+ birds. I understand a 50% deposit is required before processing.';
+                    break;
+                case 'cleaned-broiler':
+                    preMessage = 'I would like to order slaughtered and cleaned Broiler chickens at Ksh 450 per kg. Please provide processing time and delivery information for 10+ birds. I understand a 50% deposit is required before processing.';
+                    break;
+                case 'bulk-broiler':
+                    preMessage = 'I need a bulk quote for Broiler chickens at Ksh 400 per kg. Please provide availability and delivery options for 50+ birds. I understand a 50% deposit is required before processing begins.';
+                    break;
+                case 'eggs-broiler':
+                    preMessage = 'I would like to order Broiler Layers eggs at Ksh 400 per tray. Please provide availability and delivery options. I understand a 50% deposit is required before processing.';
+                    break;
+                default:
+                    preMessage = 'I am interested in placing an order. Please provide pricing and availability information. I understand a 50% deposit is required before processing begins.';
+            }
+            
+            messageField.value = preMessage;
+            
+            // Add visual highlight to message field
+            messageField.style.borderColor = '#2c5530';
+            messageField.style.boxShadow = '0 0 10px rgba(44, 85, 48, 0.3)';
+            
+            // Remove highlight after 3 seconds
+            setTimeout(() => {
+                messageField.style.borderColor = '';
+                messageField.style.boxShadow = '';
+            }, 3000);
+        }
+    }, 1000);
+}
 
 // Create floating chicken emojis for decoration
 function createFloatingChickens() {
@@ -845,10 +1003,10 @@ const PRICING_CONFIG = {
     },
     broiler: {
         chickens: {
-            live: 1000,
-            cleaned: 1000
+            live: 500,
+            cleaned: 450  // per kg
         },
-        bulk: 900
+        bulk: 400  // per kg
     },
     eggs: {
         kienyeji: 900,  // per tray
@@ -912,6 +1070,27 @@ function calculatePrice() {
                 }
                 totalPrice = quantity * pricePerBird;
                 usePerBird = true;
+            } else if (mapping.category === 'eggs') {
+                // Handle egg products - quantity represents number of trays
+                const pricePerTray = PRICING_CONFIG.eggs[mapping.type];
+                totalPrice = quantity * pricePerTray;
+                usePerBird = false;
+                
+                document.getElementById('estimatedPrice').innerHTML = `
+                    <div style="text-align: left;">
+                        <div>${quantity} tray(s) × Ksh ${pricePerTray}/tray</div>
+                        <div style="font-size: 0.9rem; opacity: 0.8;">(${quantity * 30} eggs total)</div>
+                        <div style="font-size: 1.2rem; font-weight: bold; margin-top: 10px;">Total: Ksh ${totalPrice.toLocaleString()}</div>
+                        <div style="color: var(--secondary-color); font-weight: 600; margin-top: 8px;">
+                            <i class="fas fa-info-circle"></i> Deposit Required: Ksh ${Math.round(totalPrice * 0.5).toLocaleString()} (50%)
+                        </div>
+                        <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">
+                            Balance on delivery: Ksh ${Math.round(totalPrice * 0.5).toLocaleString()}
+                        </div>
+                    </div>
+                `;
+                document.getElementById('priceEstimate').style.display = 'block';
+                return;
             }
         } else {
             // Handle legacy cases and other product types
@@ -940,28 +1119,58 @@ function calculatePrice() {
                     usePerBird = true;
                     break;
                 case 'cleaned-broiler':
-                    pricePerBird = PRICING_CONFIG.broiler.chickens.cleaned;
-                    totalPrice = quantity * pricePerBird;
-                    usePerBird = true;
-                    break;
+                    // Cleaned broiler is priced per kg, assume average 1.5kg per bird
+                    const avgWeightKg = 1.5;
+                    const pricePerKg = PRICING_CONFIG.broiler.chickens.cleaned;
+                    totalPrice = quantity * avgWeightKg * pricePerKg;
+                    usePerBird = false;
+                    document.getElementById('estimatedPrice').innerHTML = `
+                        <div style="text-align: left;">
+                            <div>${quantity} birds × ${avgWeightKg}kg × Ksh ${pricePerKg}/kg</div>
+                            <div style="font-size: 1.2rem; font-weight: bold; margin-top: 10px;">Total: Ksh ${totalPrice.toLocaleString()}</div>
+                            <div style="color: var(--secondary-color); font-weight: 600; margin-top: 8px;">
+                                <i class="fas fa-info-circle"></i> Deposit Required: Ksh ${Math.round(totalPrice * 0.5).toLocaleString()} (50%)
+                            </div>
+                            <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">
+                                Balance on delivery: Ksh ${Math.round(totalPrice * 0.5).toLocaleString()}
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('priceEstimate').style.display = 'block';
+                    return;
                 case 'bulk-broiler':
-                    pricePerBird = PRICING_CONFIG.broiler.bulk;
-                    totalPrice = quantity * pricePerBird;
-                    usePerBird = true;
-                    break;
+                    // Bulk broiler is priced per kg, assume average 1.5kg per bird
+                    const bulkAvgWeightKg = 1.5;
+                    const bulkPricePerKg = PRICING_CONFIG.broiler.bulk;
+                    totalPrice = quantity * bulkAvgWeightKg * bulkPricePerKg;
+                    usePerBird = false;
+                    document.getElementById('estimatedPrice').innerHTML = `
+                        <div style="text-align: left;">
+                            <div>${quantity} birds × ${bulkAvgWeightKg}kg × Ksh ${bulkPricePerKg}/kg (Bulk rate)</div>
+                            <div style="font-size: 1.2rem; font-weight: bold; margin-top: 10px;">Total: Ksh ${totalPrice.toLocaleString()}</div>
+                            <div style="color: var(--secondary-color); font-weight: 600; margin-top: 8px;">
+                                <i class="fas fa-info-circle"></i> Deposit Required: Ksh ${Math.round(totalPrice * 0.5).toLocaleString()} (50%)
+                            </div>
+                            <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">
+                                Balance on delivery: Ksh ${Math.round(totalPrice * 0.5).toLocaleString()}
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('priceEstimate').style.display = 'block';
+                    return;
                 
 
                 
                 // Egg Products
                 case 'eggs-kienyeji':
-                    // Assuming eggs are sold by tray (30 eggs per tray)
-                    const traysKienyeji = Math.ceil(quantity / 30);
+                    // Quantity represents number of trays (30 eggs per tray)
                     const pricePerTrayKienyeji = PRICING_CONFIG.eggs.kienyeji;
-                    totalPrice = traysKienyeji * pricePerTrayKienyeji;
+                    totalPrice = quantity * pricePerTrayKienyeji;
                     usePerBird = false;
                     document.getElementById('estimatedPrice').innerHTML = `
                         <div style="text-align: left;">
-                            <div>${traysKienyeji} tray(s) × 30 eggs = ${quantity} eggs</div>
+                            <div>${quantity} tray(s) × Ksh ${pricePerTrayKienyeji}/tray</div>
+                            <div style="font-size: 0.9rem; opacity: 0.8;">(${quantity * 30} eggs total)</div>
                             <div style="font-size: 1.2rem; font-weight: bold; margin-top: 10px;">Total: Ksh ${totalPrice.toLocaleString()}</div>
                             <div style="color: var(--secondary-color); font-weight: 600; margin-top: 8px;">
                                 <i class="fas fa-info-circle"></i> Deposit Required: Ksh ${Math.round(totalPrice * 0.5).toLocaleString()} (50%)
@@ -974,14 +1183,14 @@ function calculatePrice() {
                     document.getElementById('priceEstimate').style.display = 'block';
                     return;
                 case 'eggs-broiler':
-                    // Assuming eggs are sold by tray (30 eggs per tray)
-                    const traysBroiler = Math.ceil(quantity / 30);
+                    // Quantity represents number of trays (30 eggs per tray)
                     const pricePerTrayBroiler = PRICING_CONFIG.eggs.broiler;
-                    totalPrice = traysBroiler * pricePerTrayBroiler;
+                    totalPrice = quantity * pricePerTrayBroiler;
                     usePerBird = false;
                     document.getElementById('estimatedPrice').innerHTML = `
                         <div style="text-align: left;">
-                            <div>${traysBroiler} tray(s) × 30 eggs = ${quantity} eggs</div>
+                            <div>${quantity} tray(s) × Ksh ${pricePerTrayBroiler}/tray</div>
+                            <div style="font-size: 0.9rem; opacity: 0.8;">(${quantity * 30} eggs total)</div>
                             <div style="font-size: 1.2rem; font-weight: bold; margin-top: 10px;">Total: Ksh ${totalPrice.toLocaleString()}</div>
                             <div style="color: var(--secondary-color); font-weight: 600; margin-top: 8px;">
                                 <i class="fas fa-info-circle"></i> Deposit Required: Ksh ${Math.round(totalPrice * 0.5).toLocaleString()} (50%)
@@ -1185,36 +1394,36 @@ function sendOrderEmail(orderDetails) {
                 productName = 'Live Broiler Chicken';
                 break;
             case 'cleaned-broiler':
-                const cleanedBroilerPrice = PRICING_CONFIG.broiler.chickens.cleaned;
-                totalPrice = quantity * cleanedBroilerPrice;
-                priceCalculation = `${quantity} birds × Ksh ${cleanedBroilerPrice.toLocaleString()} each`;
+                const avgWeightKg = 1.5; // Average weight per bird
+                const cleanedBroilerPricePerKg = PRICING_CONFIG.broiler.chickens.cleaned;
+                totalPrice = quantity * avgWeightKg * cleanedBroilerPricePerKg;
+                priceCalculation = `${quantity} birds × ${avgWeightKg}kg × Ksh ${cleanedBroilerPricePerKg}/kg`;
                 depositAmount = Math.round(totalPrice * 0.5);
                 productName = 'Slaughtered & Cleaned Broiler';
                 break;
             case 'bulk-broiler':
-                const bulkBroilerPrice = PRICING_CONFIG.broiler.bulk;
-                totalPrice = quantity * bulkBroilerPrice;
-                priceCalculation = `${quantity} birds × Ksh ${bulkBroilerPrice.toLocaleString()} each (Bulk rate)`;
+                const bulkAvgWeightKg = 1.5; // Average weight per bird
+                const bulkBroilerPricePerKg = PRICING_CONFIG.broiler.bulk;
+                totalPrice = quantity * bulkAvgWeightKg * bulkBroilerPricePerKg;
+                priceCalculation = `${quantity} birds × ${bulkAvgWeightKg}kg × Ksh ${bulkBroilerPricePerKg}/kg (Bulk rate)`;
                 depositAmount = Math.round(totalPrice * 0.5);
                 productName = 'Bulk Broiler Order';
                 break;
             
             // Egg Products
             case 'eggs-kienyeji':
-                // Assuming eggs are sold by tray (30 eggs per tray)
-                const traysKienyeji = Math.ceil(quantity / 30);
+                // Quantity represents number of trays (30 eggs per tray)
                 const trayPriceKienyeji = PRICING_CONFIG.eggs.kienyeji;
-                totalPrice = traysKienyeji * trayPriceKienyeji;
-                priceCalculation = `${traysKienyeji} tray(s) × 30 eggs = ${quantity} eggs at Ksh ${trayPriceKienyeji}/tray`;
+                totalPrice = quantity * trayPriceKienyeji;
+                priceCalculation = `${quantity} tray(s) × Ksh ${trayPriceKienyeji}/tray (${quantity * 30} eggs total)`;
                 depositAmount = Math.round(totalPrice * 0.5);
                 productName = 'Kienyeji Eggs';
                 break;
             case 'eggs-broiler':
-                // Assuming eggs are sold by tray (30 eggs per tray)
-                const traysBroiler = Math.ceil(quantity / 30);
+                // Quantity represents number of trays (30 eggs per tray)
                 const trayPriceBroiler = PRICING_CONFIG.eggs.broiler;
-                totalPrice = traysBroiler * trayPriceBroiler;
-                priceCalculation = `${traysBroiler} tray(s) × 30 eggs = ${quantity} eggs at Ksh ${trayPriceBroiler}/tray`;
+                totalPrice = quantity * trayPriceBroiler;
+                priceCalculation = `${quantity} tray(s) × Ksh ${trayPriceBroiler}/tray (${quantity * 30} eggs total)`;
                 depositAmount = Math.round(totalPrice * 0.5);
                 productName = 'Broiler Layers Eggs';
                 break;
@@ -1347,9 +1556,9 @@ function getOrderTypeText(orderType) {
         case 'bulk-jogoo-kienyeji': return 'Bulk Kienyeji Jogoo - Ksh 1,300/bird';
         
         // Broiler Products
-        case 'live-broiler': return 'Live Broiler Chicken (Ksh 1,000/bird)';
-        case 'cleaned-broiler': return 'Slaughtered & Cleaned Broiler (Ksh 1,000/bird)';
-        case 'bulk-broiler': return 'Bulk Broiler Order (Ksh 900/bird)';
+        case 'live-broiler': return 'Live Broiler Chicken (Ksh 500/bird)';
+        case 'cleaned-broiler': return 'Slaughtered & Cleaned Broiler (Ksh 450/kg)';
+        case 'bulk-broiler': return 'Bulk Broiler Order (Ksh 400/kg)';
         
         // Legacy Kienyeji Products (for backward compatibility)
         case 'live-kienyeji': return 'Live Kienyeji Hens - Ksh 1,200/bird';
@@ -1581,4 +1790,121 @@ function initializeMobileModalEnhancements() {
             }
         });
     });
+}
+
+// Product order type selection function with updated pricing
+function selectOrderType(orderType) {
+    // Smooth scroll to contact section
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+        contactSection.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
+    
+    // Wait for scroll to complete, then fill form
+    setTimeout(() => {
+        const orderTypeSelect = document.getElementById('orderType');
+        if (orderTypeSelect) {
+            // Map product types to form values
+            const typeMapping = {
+                'live-jogoo-kienyeji': 'live-jogoo-kienyeji',
+                'live-hens-kienyeji': 'live-hens-kienyeji',
+                'live-hens-premium-kienyeji': 'live-hens-premium-kienyeji',
+                'cleaned-jogoo-kienyeji': 'cleaned-jogoo-kienyeji',
+                'cleaned-hens-kienyeji': 'cleaned-hens-kienyeji',
+                'cleaned-hens-premium-kienyeji': 'cleaned-hens-premium-kienyeji',
+                'bulk-kienyeji': 'bulk-hens-kienyeji',
+                'bulk-hens-kienyeji': 'bulk-hens-kienyeji',
+                'bulk-jogoo-kienyeji': 'bulk-jogoo-kienyeji',
+                'eggs-kienyeji': 'eggs-kienyeji',
+                'live-broiler': 'live-broiler',
+                'cleaned-broiler': 'cleaned-broiler',
+                'bulk-broiler': 'bulk-broiler',
+                'eggs-broiler': 'eggs-broiler',
+                // Legacy support
+                'live-kienyeji': 'live-hens-kienyeji',
+                'cleaned-kienyeji': 'cleaned-hens-kienyeji'
+            };
+            
+            // Set the order type
+            if (typeMapping[orderType]) {
+                orderTypeSelect.value = typeMapping[orderType];
+                
+                // Add visual highlight to show selection
+                orderTypeSelect.style.borderColor = '#2c5530';
+                orderTypeSelect.style.boxShadow = '0 0 10px rgba(44, 85, 48, 0.3)';
+                
+                // Remove highlight after 3 seconds
+                setTimeout(() => {
+                    orderTypeSelect.style.borderColor = '';
+                    orderTypeSelect.style.boxShadow = '';
+                }, 3000);
+            }
+            
+            // Pre-fill message based on order type with UPDATED PRICING
+            const messageField = document.getElementById('message');
+            if (messageField) {
+                let preMessage = '';
+                switch(orderType) {
+                    case 'live-jogoo-kienyeji':
+                        preMessage = 'I am interested in ordering live Jogoo (Roosters) at Ksh 1,500 per bird. Please provide availability and delivery details. I understand a 50% deposit is required before processing.';
+                        break;
+                    case 'live-hens-kienyeji':
+                        preMessage = 'I am interested in ordering live Improved Kienyeji Hens at Ksh 1,200 per bird. Please provide availability and delivery details. I understand a 50% deposit is required before processing.';
+                        break;
+                    case 'live-hens-premium-kienyeji':
+                        preMessage = 'I am interested in ordering live Premium Improved Kienyeji Hens at Ksh 1,300 per bird. Please provide availability and delivery details. I understand a 50% deposit is required before processing.';
+                        break;
+                    case 'cleaned-jogoo-kienyeji':
+                        preMessage = 'I would like to order slaughtered and cleaned Jogoo (Roosters) at Ksh 1,500 per bird. Please provide processing time and delivery information. I understand a 50% deposit is required before processing.';
+                        break;
+                    case 'cleaned-hens-kienyeji':
+                        preMessage = 'I would like to order slaughtered and cleaned Improved Kienyeji Hens at Ksh 1,200 per bird. Please provide processing time and delivery information. I understand a 50% deposit is required before processing.';
+                        break;
+                    case 'cleaned-hens-premium-kienyeji':
+                        preMessage = 'I would like to order slaughtered and cleaned Premium Improved Kienyeji Hens at Ksh 1,300 per bird. Please provide processing time and delivery information. I understand a 50% deposit is required before processing.';
+                        break;
+                    case 'bulk-kienyeji':
+                    case 'bulk-hens-kienyeji':
+                        preMessage = 'I need a bulk quote for Improved Kienyeji chickens at Ksh 1,000 per bird. Please provide availability and delivery options for 10+ birds. I understand a 50% deposit is required before processing begins.';
+                        break;
+                    case 'bulk-jogoo-kienyeji':
+                        preMessage = 'I need a bulk quote for Improved Kienyeji Jogoo at Ksh 1,300 per bird. Please provide availability and delivery options for 10+ birds. I understand a 50% deposit is required before processing begins.';
+                        break;
+                    case 'eggs-kienyeji':
+                        preMessage = 'I would like to order Improved Kienyeji eggs at Ksh 900 per tray. Please provide availability and delivery options. I understand a 50% deposit is required before processing.';
+                        break;
+                    // UPDATED BROILER PRICING
+                    case 'live-broiler':
+                        preMessage = 'I am interested in ordering live Broiler chickens at Ksh 500 per bird. Please provide availability and delivery details for 10+ birds. I understand a 50% deposit is required before processing.';
+                        break;
+                    case 'cleaned-broiler':
+                        preMessage = 'I would like to order slaughtered and cleaned Broiler chickens at Ksh 450 per kg. Please provide processing time and delivery information for 10+ birds. I understand a 50% deposit is required before processing.';
+                        break;
+                    case 'bulk-broiler':
+                        preMessage = 'I need a bulk quote for Broiler chickens at Ksh 400 per kg. Please provide availability and delivery options for 50+ birds. I understand a 50% deposit is required before processing begins.';
+                        break;
+                    case 'eggs-broiler':
+                        preMessage = 'I would like to order Broiler Layers eggs at Ksh 400 per tray. Please provide availability and delivery options. I understand a 50% deposit is required before processing.';
+                        break;
+                    default:
+                        preMessage = 'I am interested in placing an order. Please provide pricing and availability information. I understand a 50% deposit is required before processing begins.';
+                }
+                
+                messageField.value = preMessage;
+                
+                // Add visual highlight to message field
+                messageField.style.borderColor = '#2c5530';
+                messageField.style.boxShadow = '0 0 10px rgba(44, 85, 48, 0.3)';
+                
+                // Remove highlight after 3 seconds
+                setTimeout(() => {
+                    messageField.style.borderColor = '';
+                    messageField.style.boxShadow = '';
+                }, 3000);
+            }
+        }
+    }, 1000);
 }

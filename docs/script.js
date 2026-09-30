@@ -157,7 +157,7 @@ contactForm.addEventListener('submit', function(e) {
     const message = formData.get('message');
     
     // Create WhatsApp message for all order types
-    let whatsappMessage = `Hi! I'm interested in ordering from Improved Kienyeji Fresh Farm.\n\n`;
+    let whatsappMessage = `Hi! I'm interested in ordering from Kienyeji Farm Fresh.\n\n`;
     whatsappMessage += `Name: ${name}\n`;
     whatsappMessage += `Phone: ${phone}\n`;
     if (email) whatsappMessage += `Email: ${email}\n`;
@@ -512,7 +512,7 @@ contactForm.addEventListener('submit', function(e) {
 
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Improved Kienyeji Farm website loaded successfully!');
+    console.log('Kienyeji Farm Fresh website loaded successfully!');
     
     // Initialize EmailJS with error handling
     try {
@@ -568,7 +568,7 @@ document.addEventListener('DOMContentLoaded', () => {
     addChickenSoundEffects();
     
     // Show welcome message in console
-    console.log('%c🐔 Welcome to Improved Kienyeji Farm! ', 'background: #2c5530; color: white; padding: 5px 10px; border-radius: 3px;');
+    console.log('%c🐔 Welcome to Kienyeji Farm Fresh! ', 'background: #2c5530; color: white; padding: 5px 10px; border-radius: 3px;');
 
     
     // Test EmailJS connectivity
@@ -1423,7 +1423,7 @@ function sendOrderEmail(orderDetails) {
     
     // Prepare email template parameters (matching your template structure)
     const templateParams = {
-        to_name: 'Kienyeji Farm',
+        to_name: 'Kienyeji Farm Fresh',
         to_email: 'kienyejifreshfarm@gmail.com',
         from_name: orderDetails.customerName,
         from_email: orderDetails.customerEmail,
@@ -1466,7 +1466,7 @@ function sendOrderEmail(orderDetails) {
             const customerTemplateParams = {
                 to_name: orderDetails.customerName,
                 to_email: orderDetails.customerEmail,
-                from_name: '🐔 Kienyeji Farm',
+                from_name: 'Kienyeji Farm Fresh',
                 from_email: 'kienyejifreshfarm@gmail.com',
                 reply_to: 'kienyejifreshfarm@gmail.com',
                 customer_name: orderDetails.customerName,
@@ -1555,7 +1555,7 @@ function getOrderTypeText(orderType) {
         case 'eggs-kienyeji': return 'Kienyeji Eggs (Ksh 900/tray)';
         case 'eggs-broiler': return 'Broiler Layers Eggs (Ksh 400/tray)';
         
-        default: return 'Kienyeji Farm Order';
+        default: return 'Kienyeji Farm Fresh Order';
     }
 }
 

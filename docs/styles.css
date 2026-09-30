@@ -91,7 +91,7 @@ section[id] { scroll-margin-top: var(--nav-h); }
     max-width: 1180px; margin: 0 auto; padding: 0 20px;
     height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; gap: 16px;
 }
-.nav-logo h2 { font-size: 1.15rem; font-weight: 700; color: var(--primary); letter-spacing: -0.01em; }
+.nav-logo .brand { font-size: 1.15rem; font-weight: 700; color: var(--primary); letter-spacing: -0.01em; text-decoration: none; }
 .nav-menu { display: flex; list-style: none; align-items: center; gap: 6px; }
 .nav-link {
     display: block; padding: 8px 12px; border-radius: 8px;
@@ -611,7 +611,7 @@ a.order-method:hover { border-color: var(--primary); background: var(--primary-s
 @media (max-width: 600px) {
     .products, .about, .order, .testimonials, .gallery, .faq, .contact { padding: 64px 0; }
     .container, .hero-container, .nav-container { padding-left: 16px; padding-right: 16px; }
-    .nav-logo h2 { font-size: 1rem; }
+    .nav-logo .brand { font-size: 1rem; }
     .hero-actions .btn { flex: 1 1 calc(50% - 6px); padding: 12px 14px; }
     .hero-actions .btn-whatsapp { flex-basis: 100%; }
     .hero-actions .btn-text { flex-basis: 100%; justify-content: center; }

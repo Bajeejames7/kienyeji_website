@@ -8,10 +8,10 @@ kramdown:
   syntax_highlighter: rouge
 
 # Site settings
-title: "Kienyeji Farm - Fresh Free-Range Chicken"
+title: "Kienyeji Farm Fresh - Free-Range Improved Kienyeji Chicken"
 description: "Order fresh, free-range Kienyeji chicken in Kenya. Naturally raised, farm to table indigenous chicken with rich flavor and unbeatable nutrition."
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # will be automatically set by GitHub Pages
+url: "https://kienyejifarmfresh.co.ke"
 
 # SEO and social
 lang: en_US
@@ -28,6 +28,11 @@ exclude:
   - .gitignore
   - vendor
   - node_modules
+  # Internal notes and test pages - keep them off the public site
+  - "*.md"
+  - test-results.html
+  - changes-summary.html
+  - "chicken website pattern.jpg"
 
 # Plugins
 plugins:
@@ -41,7 +46,6 @@ sass:
 # Collections and defaults
 defaults:
   - scope:
-      path: ""
+      path: "email-template.html"
     values:
-      layout: "default"
-      image: /assets/images/og-image.jpg
+      sitemap: false

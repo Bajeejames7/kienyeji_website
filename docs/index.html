@@ -6,18 +6,61 @@
     <title>Kienyeji Farm Fresh - Fresh, Free-Range Indigenous Chicken</title>
     <meta name="description" content="Buy fresh, free-range Improved Kienyeji chicken in Kenya. Naturally raised, farm to table. Order fully grown, organically raised indigenous chicken with rich flavor.">
     <meta name="keywords" content="Improved Kienyeji chicken for sale in Kenya, Buy indigenous chicken Nairobi, Free-range Improved Kienyeji meat supplier, Where to buy improved kienyeji chicken online">
-    <link rel="icon" type="image/png" href="chicken pics/Kienyeji_fresh_farm_logo-removebg-preview.png">
-    <link rel="shortcut icon" type="image/png" href="chicken pics/Kienyeji_fresh_farm_logo-removebg-preview.png">
-    <link rel="apple-touch-icon" href="chicken pics/Kienyeji_fresh_farm_logo-removebg-preview.png">
+    <link rel="canonical" href="https://kienyejifarmfresh.co.ke/">
+    <meta name="theme-color" content="#2c5530">
+
+    <!-- Link previews (WhatsApp, Facebook, X) -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Kienyeji Farm Fresh">
+    <meta property="og:title" content="Kienyeji Farm Fresh - Free-Range Improved Kienyeji Chicken">
+    <meta property="og:description" content="Fresh, free-range Improved Kienyeji chicken and eggs from our farms in Nairobi &amp; Makueni. Order on WhatsApp: +254 769 583 063.">
+    <meta property="og:url" content="https://kienyejifarmfresh.co.ke/">
+    <meta property="og:image" content="https://kienyejifarmfresh.co.ke/chicken%20pics/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="en_KE">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="icon" type="image/png" href="chicken%20pics/Kienyeji_fresh_farm_logo-removebg-preview.png">
+    <link rel="apple-touch-icon" href="chicken%20pics/Kienyeji_fresh_farm_logo-removebg-preview.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Business details for Google Search -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Kienyeji Farm Fresh",
+        "description": "Free-range Improved Kienyeji chicken, broilers and eggs from farms in Nairobi and Makueni counties.",
+        "url": "https://kienyejifarmfresh.co.ke/",
+        "logo": "https://kienyejifarmfresh.co.ke/chicken%20pics/Kienyeji_fresh_farm_logo-removebg-preview.png",
+        "image": "https://kienyejifarmfresh.co.ke/chicken%20pics/og-image.jpg",
+        "telephone": "+254769583063",
+        "email": "kienyejifreshfarm@gmail.com",
+        "priceRange": "KSh 400 - KSh 1,500",
+        "currenciesAccepted": "KES",
+        "paymentAccepted": "M-PESA, Cash, Bank Transfer",
+        "address": {
+            "@type": "PostalAddress",
+            "addressRegion": "Nairobi",
+            "addressCountry": "KE"
+        },
+        "areaServed": ["Nairobi", "Makueni", "Kiambu", "Machakos", "Kajiado"],
+        "openingHoursSpecification": {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            "opens": "07:00",
+            "closes": "19:00"
+        }
+    }
+    </script>
     <link rel="stylesheet" href="styles.css">
+    <script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('kff-theme')||'light')}catch(e){}</script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Google Identity Services - REMOVED -->
-    <!-- <script src="https://accounts.google.com/gsi/client" async defer></script> -->
     <!-- EmailJS for sending emails -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    
-
 </head>
 <body>
     <!-- Navigation -->
@@ -46,12 +89,12 @@
                     <a href="#contact" class="nav-link">Contact</a>
                 </li>
                 <li class="nav-item">
-                    <button id="themeToggle" class="theme-toggle" title="Toggle dark/light mode">
+                    <button id="themeToggle" class="theme-toggle" title="Toggle dark/light mode" aria-label="Toggle dark/light mode">
                         <i class="fas fa-moon" id="themeIcon"></i>
                     </button>
                 </li>
             </ul>
-            <div class="nav-toggle" id="mobile-menu">
+            <div class="nav-toggle" id="mobile-menu" role="button" tabindex="0" aria-label="Open menu" aria-expanded="false">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -64,35 +107,45 @@
     <section id="home" class="hero">
         <div class="hero-container">
             <div class="hero-content">
-                <h1 class="hero-title">Fresh, Free-Range Improved Kienyeji Chicken – Naturally Raised, Farm to Table!</h1>
+                <span class="eyebrow"><i class="fas fa-leaf"></i> Free-range &middot; Nairobi &amp; Makueni farms</span>
+                <h1 class="hero-title">Fresh, Free-Range <span class="accent">Improved Kienyeji</span> Chicken</h1>
+                <p class="hero-tagline">Naturally raised, farm to table.</p>
                 <p class="hero-subtitle">Order fully grown, organically raised indigenous chicken with rich flavor and unbeatable nutrition. Improved Kienyeji Chicken is a Kenyan-developed hybrid that combines the hardiness and rich flavor of indigenous chickens with the fast growth, high egg production, and efficiency of commercial breeds.</p>
-            </div>
-            <div class="hero-image">
-                <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=600&h=400&fit=crop&crop=center" alt="Fresh Free-range Kienyeji chicken" loading="lazy">
-                <div class="hero-pattern"></div>
-                
-                <!-- Action Buttons Below Image -->
+
                 <div class="hero-actions">
-                    <a href="#products" class="btn btn-primary btn-interactive">
-                        <i class="fas fa-shopping-cart"></i> Order Now
+                    <a href="https://wa.me/254769583063?text=Hi!%20I'd%20like%20to%20order%20Improved%20Kienyeji%20chicken" class="btn btn-whatsapp" target="_blank" rel="noopener">
+                        <i class="fab fa-whatsapp"></i> Order on WhatsApp
                     </a>
                     <a href="tel:+254769583063" class="btn btn-secondary">
                         <i class="fas fa-phone"></i> Call to Buy
                     </a>
-                    <a href="https://wa.me/254769583063" class="btn btn-whatsapp btn-interactive" target="_blank">
-                        <i class="fab fa-whatsapp"></i> WhatsApp Us
-                    </a>
-                    <button id="emailOrderBtn" class="btn btn-outline btn-interactive" onclick="showEmailOrderModal()">
+                    <button id="emailOrderBtn" class="btn btn-outline" onclick="showEmailOrderModal()">
                         <i class="fas fa-envelope"></i> Email Order
                     </button>
-                    <a href="#products" class="btn btn-outline">
-                        <i class="fas fa-list"></i> View Price List
+                    <a href="#products" class="btn-text">
+                        View price list <i class="fas fa-arrow-down"></i>
                     </a>
-                    
-                    <!-- Payment Policy Notice -->
-                    <div class="payment-policy-notice">
-                        <i class="fas fa-info-circle"></i>
-                        <span><strong>Note:</strong> 50% deposit required before order processing</span>
+                </div>
+
+                <!-- Payment Policy Notice -->
+                <div class="payment-policy-notice">
+                    <i class="fas fa-info-circle"></i>
+                    <span><strong>Note:</strong> 50% deposit required before order processing</span>
+                </div>
+
+                <ul class="hero-trust">
+                    <li><strong>5+ years</strong> raising Kienyeji</li>
+                    <li><strong>500+</strong> families served</li>
+                    <li><strong>Same-day</strong> Nairobi delivery</li>
+                </ul>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=800&h=680&fit=crop&crop=center" alt="Fresh Free-range Kienyeji chicken" width="800" height="680" fetchpriority="high">
+                <div class="hero-badge">
+                    <i class="fas fa-check-circle"></i>
+                    <div>
+                        <strong>Never frozen</strong>
+                        <span>Slaughtered fresh on order</span>
                     </div>
                 </div>
             </div>
@@ -152,7 +205,7 @@
                 
                 <div class="product-card featured">
                     <div class="product-image">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbLEBERKbgZGQzYD3Nzxy9sYxYujnxj-QyIQ&s" alt="Bulk Improved Kienyeji Orders" loading="lazy">
+                        <img src="chicken%20pics/chiken1.jpeg" alt="Bulk Improved Kienyeji Orders" loading="lazy">
                     </div>
                     <div class="product-info">
                         <h3>Bulk Improved Kienyeji Orders</h3>
@@ -318,16 +371,10 @@
             <div class="section-header">
                 <h2>About Our Farm</h2>
                 <p>Our chickens roam freely on pesticide-free pasture, resulting in healthy, lean, and flavorful meat just like the old days.</p>
-                <div class="section-image">
-                    <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&h=200&fit=crop&crop=center" alt="Farm landscape banner" loading="lazy">
-                </div>
             </div>
             
             <div class="about-content">
                 <div class="about-text">
-                    <h2>About Our Farm</h2>
-                    <p class="about-intro">Our chickens roam freely on pesticide-free pasture, resulting in healthy, lean, and flavorful meat just like the old days.</p>
-                    
                     <div class="about-features">
                         <div class="feature">
                             <i class="fas fa-leaf"></i>
@@ -367,7 +414,6 @@
                 
                 <div class="about-image">
                     <img src="chicken%20pics/chickenfeeding.jpeg" alt="Our free-range farm with chickens" loading="lazy">
-                    <div class="about-pattern"></div>
                 </div>
             </div>
         </div>
@@ -379,9 +425,6 @@
             <div class="section-header">
                 <h2>How to Order</h2>
                 <p>Simple and convenient ordering process</p>
-                <div class="section-image">
-                    <img src="https://images.unsplash.com/photo-1597148133374-f40cd4fbc2cd?w=600&h=200&fit=crop&crop=center" alt="Easy ordering process" loading="lazy">
-                </div>
             </div>
             
             <div class="order-steps">
@@ -389,7 +432,7 @@
                     <div class="step-number">1</div>
                     <h3>Choose Your Method</h3>
                     <div class="order-methods">
-                        <a href="https://wa.me/254769583063" class="order-method" target="_blank">
+                        <a href="https://wa.me/254769583063" class="order-method" target="_blank" rel="noopener">
                             <i class="fab fa-whatsapp"></i>
                             <span>WhatsApp</span>
                         </a>
@@ -468,7 +511,7 @@
             
             <div class="testimonials-content">
                 <div class="testimonials-image">
-                    <img src="chicken%20pics/customer_review_image.png" alt="Happy customers with fresh chicken" loading="lazy">
+                    <img src="chicken%20pics/customer_review_image.jpg" alt="Happy customers with fresh chicken" loading="lazy">
                     <div class="testimonials-overlay">
                         <h3>Customer Reviews</h3>
                         <p>Trusted by 500+ families</p>
@@ -477,7 +520,6 @@
                 
                 <div class="testimonials-grid">
                 <div class="testimonial-card">
-                    <div class="testimonial-pattern"></div>
                     <div class="stars">
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
@@ -495,7 +537,6 @@
                 </div>
                 
                 <div class="testimonial-card">
-                    <div class="testimonial-pattern"></div>
                     <div class="stars">
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
@@ -513,7 +554,6 @@
                 </div>
                 
                 <div class="testimonial-card">
-                    <div class="testimonial-pattern"></div>
                     <div class="stars">
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
@@ -593,7 +633,7 @@
             
             <div class="faq-content">
                 <div class="faq-image">
-                    <img src="chicken%20pics/queries_pic.png" alt="Chicken farmer answering questions" loading="lazy">
+                    <img src="chicken%20pics/queries_pic.jpg" alt="Chicken farmer answering questions" loading="lazy">
                     <div class="faq-overlay">
                         <h3>Got Questions?</h3>
                         <p>We're here to help!</p>
@@ -602,7 +642,7 @@
                 
                 <div class="faq-container">
                     <div class="faq-item">
-                        <div class="faq-question">
+                        <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
                             <h3>How long does delivery take?</h3>
                             <i class="fas fa-plus"></i>
                         </div>
@@ -612,7 +652,7 @@
                     </div>
                     
                     <div class="faq-item">
-                        <div class="faq-question">
+                        <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
                             <h3>Do you sell to hotels or bulk buyers?</h3>
                             <i class="fas fa-plus"></i>
                         </div>
@@ -622,7 +662,7 @@
                     </div>
                     
                     <div class="faq-item">
-                        <div class="faq-question">
+                        <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
                             <h3>Can I visit the farm?</h3>
                             <i class="fas fa-plus"></i>
                         </div>
@@ -632,7 +672,7 @@
                     </div>
                     
                     <div class="faq-item">
-                        <div class="faq-question">
+                        <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
                             <h3>Are your chickens vaccinated?</h3>
                             <i class="fas fa-plus"></i>
                         </div>
@@ -642,7 +682,7 @@
                     </div>
                     
                     <div class="faq-item">
-                        <div class="faq-question">
+                        <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
                             <h3>What payment methods do you accept?</h3>
                             <i class="fas fa-plus"></i>
                         </div>
@@ -655,7 +695,7 @@
                     </div>
                     
                     <div class="faq-item">
-                        <div class="faq-question">
+                        <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
                             <h3>How do you ensure freshness?</h3>
                             <i class="fas fa-plus"></i>
                         </div>
@@ -690,7 +730,7 @@
                         <i class="fab fa-whatsapp"></i>
                         <div>
                             <h4>WhatsApp</h4>
-                            <a href="https://wa.me/254769583063" target="_blank">+254 769 583 063</a>
+                            <a href="https://wa.me/254769583063" target="_blank" rel="noopener">+254 769 583 063</a>
                         </div>
                     </div>
                     
@@ -739,8 +779,10 @@
                                 <optgroup label="Improved Kienyeji Products">
                                     <option value="live-jogoo-kienyeji">Live Jogoo (Roosters)</option>
                                     <option value="live-hens-kienyeji">Live Hens (Standard)</option>
+                                    <option value="live-hens-premium-kienyeji">Live Hens (Premium)</option>
                                     <option value="cleaned-jogoo-kienyeji">Slaughtered & Cleaned Jogoo</option>
                                     <option value="cleaned-hens-kienyeji">Slaughtered & Cleaned Hens</option>
+                                    <option value="cleaned-hens-premium-kienyeji">Slaughtered & Cleaned Hens (Premium)</option>
                                     <option value="bulk-hens-kienyeji">Bulk Improved Kienyeji Hens</option>
                                     <option value="bulk-jogoo-kienyeji">Bulk Improved Kienyeji Jogoo</option>
                                     <option value="eggs-kienyeji">Improved Kienyeji Eggs</option>
@@ -772,9 +814,9 @@
                     <h3>Improved Kienyeji Fresh Farm</h3>
                     <p>Premium quality, naturally raised indigenous chicken. From our farms in Nairobi and Makueni counties to your business with excellence and care.</p>
                     <div class="social-links">
-                        <a href="https://wa.me/254769583063" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                        <a href="tel:+254769583063"><i class="fas fa-phone"></i></a>
-                        <a href="mailto:kienyejifreshfarm@gmail.com"><i class="fas fa-envelope"></i></a>
+                        <a href="https://wa.me/254769583063" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="tel:+254769583063" aria-label="Call us"><i class="fas fa-phone"></i></a>
+                        <a href="mailto:kienyejifreshfarm@gmail.com" aria-label="Email us"><i class="fas fa-envelope"></i></a>
                     </div>
                 </div>
                 
@@ -820,7 +862,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2>📧 Email Your Order</h2>
-                <span class="close" onclick="closeEmailOrderModal()">&times;</span>
+                <span class="close" onclick="closeEmailOrderModal()" role="button" tabindex="0" aria-label="Close">&times;</span>
             </div>
             
             <div class="modal-body">
@@ -884,8 +926,10 @@
                                 <optgroup label="Improved Kienyeji Products">
                                     <option value="live-jogoo-kienyeji">Live Jogoo (Roosters) - Ksh 1,500/bird</option>
                                     <option value="live-hens-kienyeji">Live Hens (Standard) - Ksh 1,200/bird</option>
+                                    <option value="live-hens-premium-kienyeji">Live Hens (Premium) - Ksh 1,300/bird</option>
                                     <option value="cleaned-jogoo-kienyeji">Slaughtered & Cleaned Jogoo - Ksh 1,500/bird</option>
                                     <option value="cleaned-hens-kienyeji">Slaughtered & Cleaned Hens - Ksh 1,200/bird</option>
+                                    <option value="cleaned-hens-premium-kienyeji">Slaughtered & Cleaned Hens (Premium) - Ksh 1,300/bird</option>
                                     <option value="bulk-hens-kienyeji">Bulk Improved Kienyeji Hens - Ksh 1,000/bird</option>
                                     <option value="bulk-jogoo-kienyeji">Bulk Improved Kienyeji Jogoo - Ksh 1,300/bird</option>
                                     <option value="eggs-kienyeji">Improved Kienyeji Eggs (Ksh 900/tray)</option>
@@ -939,13 +983,13 @@
 
     <!-- WhatsApp Float Button -->
     <div class="whatsapp-float">
-        <a href="https://wa.me/254769583063?text=Hi! I'm interested in ordering Improved Kienyeji chicken" target="_blank">
+        <a href="https://wa.me/254769583063?text=Hi!%20I'm%20interested%20in%20ordering%20Improved%20Kienyeji%20chicken" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp">
             <i class="fab fa-whatsapp"></i>
         </a>
     </div>
 
     <!-- Back to Top Button -->
-    <div class="back-to-top" id="backToTop">
+    <div class="back-to-top" id="backToTop" role="button" tabindex="0" aria-label="Back to top">
         <i class="fas fa-arrow-up"></i>
     </div>
 

@@ -2,17 +2,31 @@
 const mobileMenu = document.getElementById('mobile-menu');
 const navMenu = document.querySelector('.nav-menu');
 
+function setMobileMenu(open) {
+    mobileMenu.classList.toggle('active', open);
+    navMenu.classList.toggle('active', open);
+    mobileMenu.setAttribute('aria-expanded', String(open));
+    mobileMenu.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+}
+
 mobileMenu.addEventListener('click', () => {
-    mobileMenu.classList.toggle('active');
-    navMenu.classList.toggle('active');
+    setMobileMenu(!navMenu.classList.contains('active'));
 });
+
+// Make div-based controls behave like buttons for keyboard users
+function onActivate(el, handler) {
+    el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handler.call(el, e);
+        }
+    });
+}
+onActivate(mobileMenu, () => mobileMenu.click());
 
 // Close mobile menu when clicking on a link
 document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-        mobileMenu.classList.remove('active');
-        navMenu.classList.remove('active');
-    });
+    link.addEventListener('click', () => setMobileMenu(false));
 });
 
 // Theme Toggle Functionality
@@ -21,10 +35,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const themeIcon = document.getElementById('themeIcon');
     const html = document.documentElement;
 
-    // Get theme from localStorage or default to dark
-    let currentTheme = localStorage.getItem('theme') || 'dark';
+    // Saved choice, otherwise light (the <head> sets this early to avoid a flash)
+    let currentTheme = 'light';
+    try { currentTheme = localStorage.getItem('kff-theme') || 'light'; } catch (e) {}
     html.setAttribute('data-theme', currentTheme);
-    localStorage.setItem('theme', currentTheme);
 
     // Update icon based on current theme
     function updateThemeIcon(theme) {
@@ -42,31 +56,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize icon
     updateThemeIcon(currentTheme);
 
-    // Debug logging
-    console.log('Theme initialized:', currentTheme);
-    console.log('HTML data-theme:', html.getAttribute('data-theme'));
-
     // Function to update navbar background based on theme and scroll position
     function updateNavbarBackground() {
-        const navbar = document.querySelector('.navbar');
-        const isDarkTheme = document.documentElement.getAttribute('data-theme') === 'dark';
-        
-        if (window.scrollY > 100) {
-            if (isDarkTheme) {
-                navbar.style.background = 'rgba(26, 26, 26, 0.98)';
-            } else {
-                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-            }
-            navbar.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.1)';
-        } else {
-            if (isDarkTheme) {
-                navbar.style.background = 'rgba(26, 26, 26, 0.95)';
-            } else {
-                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-            }
-            navbar.style.boxShadow = 'none';
-        }
+        document.querySelector('.navbar').classList.toggle('scrolled', window.scrollY > 10);
     }
+    updateNavbarBackground();
 
     // Theme toggle event listener
     if (themeToggle) {
@@ -76,21 +70,12 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Apply theme changes
             html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
+            try { localStorage.setItem('kff-theme', newTheme); } catch (e) {}
             updateThemeIcon(newTheme);
             
             // Update navbar background immediately after theme change
             updateNavbarBackground();
             
-            // Add a subtle animation effect
-            themeToggle.style.transform = 'rotate(360deg)';
-            themeToggle.style.transition = 'transform 0.3s ease';
-            setTimeout(() => {
-                themeToggle.style.transform = 'rotate(0deg)';
-            }, 300);
-            
-            // Debug logging
-            console.log('Theme switched to:', newTheme);
         });
     } else {
         console.error('Theme toggle button not found');
@@ -111,13 +96,16 @@ document.querySelectorAll('.faq-question').forEach(question => {
         // Close all FAQ items
         document.querySelectorAll('.faq-item').forEach(item => {
             item.classList.remove('active');
+            item.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
         });
-        
+
         // Open clicked item if it wasn't active
         if (!isActive) {
             faqItem.classList.add('active');
+            question.setAttribute('aria-expanded', 'true');
         }
     });
+    onActivate(question, () => question.click());
 });
 
 // Smooth scrolling for navigation links
@@ -152,6 +140,7 @@ backToTopButton.addEventListener('click', () => {
         behavior: 'smooth'
     });
 });
+onActivate(backToTopButton, () => backToTopButton.click());
 
 // Contact form handling
 const contactForm = document.getElementById('contactForm');
@@ -273,7 +262,8 @@ const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
+            entry.target.style.transform = '';
+            observer.unobserve(entry.target);
         }
     });
 }, observerOptions);
@@ -290,16 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Product card hover effects
-document.querySelectorAll('.product-card').forEach(card => {
-    card.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-10px) scale(1.02)';
-    });
-    
-    card.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0) scale(1)';
-    });
-});
 
 // Gallery lightbox effect (simple version)
 document.querySelectorAll('.gallery-item img').forEach(img => {
@@ -350,10 +330,11 @@ document.querySelectorAll('.gallery-item img').forEach(img => {
 
 // Add loading animation for images
 document.querySelectorAll('img').forEach(img => {
+    if (img.complete) return;
     img.addEventListener('load', function() {
         this.style.opacity = '1';
     });
-    
+
     img.style.opacity = '0';
     img.style.transition = 'opacity 0.3s ease';
 });
@@ -479,7 +460,7 @@ function validateForm(form) {
             input.style.borderColor = '#e74c3c';
             isValid = false;
         } else {
-            input.style.borderColor = '#ddd';
+            input.style.borderColor = '';
         }
     });
     
@@ -583,9 +564,6 @@ document.addEventListener('DOMContentLoaded', () => {
         emailOrderForm.addEventListener('submit', handleEmailOrderSubmit);
     }
     
-    // Add floating chicken patterns
-    createFloatingChickens();
-    
     // Add chicken sound effects on button clicks (optional)
     addChickenSoundEffects();
     
@@ -600,6 +578,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Mobile modal enhancements
     initializeMobileModalEnhancements();
+
+    const modalClose = document.querySelector('#emailOrderModal .close');
+    if (modalClose) onActivate(modalClose, closeEmailOrderModal);
+    document.addEventListener('keydown', (e) => {
+        const modal = document.getElementById('emailOrderModal');
+        if (e.key === 'Escape' && modal && modal.style.display === 'block') closeEmailOrderModal();
+    });
 });
 
 // Product order type selection function with updated pricing

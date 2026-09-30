@@ -577,6 +577,51 @@ a.order-method:hover { border-color: var(--primary); background: var(--primary-s
 .mobile-modal.keyboard-visible .modal-content { max-height: 70vh; }
 .mobile-modal.keyboard-visible .modal-body { padding-bottom: 88px; }
 
+/* ---------- Kitenge accents ---------- */
+/* Ribbon along the top edge of the menu bar */
+.navbar::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+    background: var(--kitenge) 0 0 / 90px repeat-x;
+}
+
+/* Band closing the hero on the home page and guide pages */
+.hero, .page-hero { position: relative; }
+.hero::after, .page-hero::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 12px;
+    background: var(--kitenge) 0 0 / 110px repeat-x;
+}
+.page-hero { border-bottom: none; }
+
+/* Reviews section: faint kitenge texture behind the cards */
+.testimonials {
+    background:
+        linear-gradient(color-mix(in srgb, var(--surface-2) 93%, transparent), color-mix(in srgb, var(--surface-2) 93%, transparent)),
+        var(--kitenge) 0 0 / 240px repeat;
+}
+
+/* Kitenge edges on cards */
+.product-card.featured::before,
+.contact-form::before,
+.aside-card:first-child::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px; z-index: 3;
+    background: var(--kitenge) 0 0 / 90px repeat-x;
+}
+.contact-form, .aside-card:first-child { position: relative; overflow: hidden; }
+.aside-card:first-child { padding-top: 26px; }
+.contact-form { padding-top: 40px; }
+.product-card.featured::after { top: 18px; }
+
+.testimonial-card { position: relative; overflow: hidden; padding-left: 32px; }
+.testimonial-card::before {
+    content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 8px;
+    background: var(--kitenge) 0 0 / 90px repeat-y;
+}
+
+/* Email order window header */
+.modal-header {
+    background: linear-gradient(rgba(24, 52, 29, 0.88), rgba(24, 52, 29, 0.88)), var(--kitenge) 0 0 / 160px repeat;
+}
+
 /* ---------- Keyframes ---------- */
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes modalSlideIn { from { opacity: 0; transform: translateY(-24px); } to { opacity: 1; transform: none; } }

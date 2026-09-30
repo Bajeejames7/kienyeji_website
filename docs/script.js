@@ -330,7 +330,8 @@ document.querySelectorAll('.gallery-item img').forEach(img => {
 
 // Add loading animation for images
 document.querySelectorAll('img').forEach(img => {
-    if (img.complete) return;
+    // Skip images already loaded and the hero photo (fading it in delays the first paint)
+    if (img.complete || img.getAttribute('fetchpriority') === 'high') return;
     img.addEventListener('load', function() {
         this.style.opacity = '1';
     });

@@ -518,7 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize EmailJS with error handling
     try {
         if (typeof emailjs !== 'undefined') {
-            emailjs.init('e2rfnswmezMktxHmT'); // Your EmailJS public key
+            emailjs.init('XX-V_8XDa2DvnNF8x'); // Your EmailJS public key
             console.log('EmailJS initialized successfully');
         } else {
             console.error('EmailJS library not loaded');
@@ -1292,9 +1292,9 @@ function testEmailJSConnection() {
     }
     
     console.log('EmailJS is loaded and ready for email sending.');
-    console.log('Service ID: service_8zxkkmo');
-    console.log('Template ID: template_p0v04ak');
-    console.log('Public Key: e2rfnswmezMktxHmT');
+    console.log('Service ID: service_w0504re');
+    console.log('Template ID: template_kxkcj3o');
+    console.log('Public Key: XX-V_8XDa2DvnNF8x');
 }
 
 // Send order email using EmailJS
@@ -1458,7 +1458,7 @@ function sendOrderEmail(orderDetails) {
     console.log('Sending order notification to farm...');
     
     // First send to farm (order notification)
-    emailjs.send('service_8zxkkmo', 'template_p0v04ak', templateParams)
+    emailjs.send('service_w0504re', 'template_kxkcj3o', templateParams)
         .then(function(response) {
             console.log('Farm notification sent successfully:', response.status, response.text);
             
@@ -1491,7 +1491,7 @@ function sendOrderEmail(orderDetails) {
             };
             
             // Send customer confirmation (using the correct template ID)
-            return emailjs.send('service_8zxkkmo', 'template_y4g99t4', customerTemplateParams);
+            return emailjs.send('service_w0504re', 'template_ffvdxo8', customerTemplateParams);
         })
         .then(function(customerResponse) {
             console.log('Customer confirmation sent successfully:', customerResponse.status, customerResponse.text);

@@ -982,6 +982,10 @@ const PRICING_CONFIG = {
             live: 1200,
             cleaned: 1200
         },
+        hensPremium: {
+            live: 1300,
+            cleaned: 1300
+        },
         bulk: {
             hens: 1000,
             jogoo: 1300
@@ -1007,6 +1011,8 @@ const ORDER_TYPE_MAPPING = {
     'live-hens-kienyeji': { category: 'kienyeji', type: 'hens', processing: 'live' },
     'cleaned-jogoo-kienyeji': { category: 'kienyeji', type: 'jogoo', processing: 'cleaned' },
     'cleaned-hens-kienyeji': { category: 'kienyeji', type: 'hens', processing: 'cleaned' },
+    'live-hens-premium-kienyeji': { category: 'kienyeji', type: 'hensPremium', processing: 'live' },
+    'cleaned-hens-premium-kienyeji': { category: 'kienyeji', type: 'hensPremium', processing: 'cleaned' },
     'bulk-hens-kienyeji': { category: 'kienyeji', type: 'bulk', subtype: 'hens', processing: 'mixed' },
     'bulk-jogoo-kienyeji': { category: 'kienyeji', type: 'bulk', subtype: 'jogoo', processing: 'mixed' },
     
@@ -1325,15 +1331,16 @@ function sendOrderEmail(orderDetails) {
     const quantity = parseInt(orderDetails.quantity);
     
     // Check if it's a new product type using the mapping
-    if (ORDER_TYPE_MAPPING[orderDetails.orderType]) {
+    // Kienyeji products are priced from the mapping; broiler and eggs are priced in the switch below.
+    if (ORDER_TYPE_MAPPING[orderDetails.orderType] && ORDER_TYPE_MAPPING[orderDetails.orderType].category === 'kienyeji') {
         const mapping = ORDER_TYPE_MAPPING[orderDetails.orderType];
         
         if (mapping.category === 'kienyeji') {
             if (mapping.type === 'bulk') {
-                const bulkPrice = PRICING_CONFIG.kienyeji.bulk;
+                const bulkPrice = PRICING_CONFIG.kienyeji.bulk[mapping.subtype];
                 totalPrice = quantity * bulkPrice;
                 priceCalculation = `${quantity} birds × Ksh ${bulkPrice.toLocaleString()} each (Bulk rate)`;
-                productName = 'Bulk Kienyeji Order';
+                productName = mapping.subtype === 'jogoo' ? 'Bulk Kienyeji Jogoo' : 'Bulk Kienyeji Hens';
             } else {
                 const price = PRICING_CONFIG.kienyeji[mapping.type][mapping.processing];
                 totalPrice = quantity * price;
@@ -1422,6 +1429,27 @@ function sendOrderEmail(orderDetails) {
         }
     }
     
+    // One order number for the farm email, the customer email and the orders app.
+    const orderId = `KF-${Date.now()}`;
+
+    // Save to the orders app database (docs/orders-db.js). Never blocks the emails.
+    if (typeof window.kfSaveOrder === 'function') {
+        window.kfSaveOrder({
+            orderId,
+            customerName: orderDetails.customerName,
+            customerPhone: orderDetails.customerPhone,
+            customerEmail: orderDetails.customerEmail,
+            orderType: orderDetails.orderType,
+            productName: productName || getOrderTypeText(orderDetails.orderType),
+            quantity: orderDetails.quantity,
+            deliveryLocation: orderDetails.deliveryLocation,
+            deliveryDate: orderDetails.deliveryDate,
+            specialInstructions: orderDetails.specialInstructions,
+            totalPrice: totalPrice,
+            depositAmount: depositAmount > 0 ? depositAmount : Math.round(totalPrice * 0.5)
+        }).catch(err => console.error('Could not save order to the orders app:', err));
+    }
+
     // Prepare email template parameters (matching your template structure)
     const templateParams = {
         to_name: 'Kienyeji Farm Fresh',
@@ -1432,7 +1460,7 @@ function sendOrderEmail(orderDetails) {
         customer_name: orderDetails.customerName,
         customer_email: orderDetails.customerEmail,
         customer_phone: orderDetails.customerPhone,
-        order_id: `KF-${Date.now()}`,
+        order_id: orderId,
         product_name: getOrderTypeText(orderDetails.orderType),
         product_image: (orderDetails.orderType.includes('eggs')) ? 
             'https://images.unsplash.com/photo-1603569283847-aa40cc0b1420?w=64&h=64&fit=crop&crop=center' : 
@@ -1473,7 +1501,7 @@ function sendOrderEmail(orderDetails) {
                 customer_name: orderDetails.customerName,
                 customer_email: orderDetails.customerEmail,
                 customer_phone: orderDetails.customerPhone,
-                order_id: `KF-${Date.now()}`,
+                order_id: orderId,
                 product_name: getOrderTypeText(orderDetails.orderType),
                 quantity: orderDetails.quantity,
                 unit: (orderDetails.orderType.includes('eggs')) ? 'eggs' : 'chickens',

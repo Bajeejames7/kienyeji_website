@@ -527,12 +527,12 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Failed to initialize EmailJS:', error);
     }
     
-    // Set minimum date for delivery to tomorrow
+    // Set minimum date for delivery to today (local date, not UTC)
     const deliveryDateInput = document.getElementById('deliveryDate');
     if (deliveryDateInput) {
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        deliveryDateInput.min = tomorrow.toISOString().split('T')[0];
+        const today = new Date();
+        const pad = n => String(n).padStart(2, '0');
+        deliveryDateInput.min = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
     }
     
     // Add price calculation listeners for email order form

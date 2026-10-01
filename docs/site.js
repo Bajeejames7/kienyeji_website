@@ -95,8 +95,9 @@
         const date = quote.querySelector('input[type="date"]');
         if (date) {
             const d = new Date();
-            d.setDate(d.getDate() + 2);
-            date.min = d.toISOString().split('T')[0];
+            d.setDate(d.getDate() + 1);
+            const pad = n => String(n).padStart(2, '0');
+            date.min = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
         }
     }
 })();

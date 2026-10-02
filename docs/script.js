@@ -213,7 +213,7 @@ contactForm.addEventListener('submit', function(e) {
             break;
         case 'eggs-broiler':
             orderTypeText = 'Broiler Layers Eggs';
-            pricingInfo = 'Ksh 400 per tray (30 eggs)';
+            pricingInfo = 'Ksh 450 per tray (30 eggs)';
             break;
         default:
             orderTypeText = orderType;
@@ -682,7 +682,7 @@ function selectOrderType(orderType) {
                     preMessage = 'I need a bulk quote for Broiler chickens at Ksh 400 per kg. Please provide availability and delivery options for 50+ birds. I understand a 50% deposit is required before processing begins.';
                     break;
                 case 'eggs-broiler':
-                    preMessage = 'I would like to order Broiler Layers eggs at Ksh 400 per tray. Please provide availability and delivery options. I understand a 50% deposit is required before processing.';
+                    preMessage = 'I would like to order Broiler Layers eggs at Ksh 450 per tray. Please provide availability and delivery options. I understand a 50% deposit is required before processing.';
                     break;
                 default:
                     preMessage = 'I am interested in placing an order. Please provide pricing and availability information. I understand a 50% deposit is required before processing begins.';
@@ -972,6 +972,9 @@ function signOut() {
 }
 
 // Pricing configuration object - KIENYEJI AND BROILER CHICKENS
+// Shown to customers wherever the deposit is mentioned.
+const PAYMENT_TILL_TEXT = 'Lipa na M-Pesa Till Number 7972513';
+
 const PRICING_CONFIG = {
     kienyeji: {
         jogoo: {
@@ -1000,7 +1003,7 @@ const PRICING_CONFIG = {
     },
     eggs: {
         kienyeji: 900,  // per tray
-        broiler: 400    // per tray
+        broiler: 450    // per tray
     }
 };
 
@@ -1079,6 +1082,7 @@ function calculatePrice() {
                         <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">
                             Balance on delivery: Ksh ${Math.round(totalPrice * 0.5).toLocaleString()}
                         </div>
+                        <div style="font-size: 0.9rem; margin-top: 5px;"><i class="fas fa-mobile-alt"></i> Pay deposit via ${PAYMENT_TILL_TEXT}</div>
                     </div>
                 `;
                 document.getElementById('priceEstimate').style.display = 'block';
@@ -1126,6 +1130,7 @@ function calculatePrice() {
                             <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">
                                 Balance on delivery: Ksh ${Math.round(totalPrice * 0.5).toLocaleString()}
                             </div>
+                            <div style="font-size: 0.9rem; margin-top: 5px;"><i class="fas fa-mobile-alt"></i> Pay deposit via ${PAYMENT_TILL_TEXT}</div>
                         </div>
                     `;
                     document.getElementById('priceEstimate').style.display = 'block';
@@ -1146,6 +1151,7 @@ function calculatePrice() {
                             <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">
                                 Balance on delivery: Ksh ${Math.round(totalPrice * 0.5).toLocaleString()}
                             </div>
+                            <div style="font-size: 0.9rem; margin-top: 5px;"><i class="fas fa-mobile-alt"></i> Pay deposit via ${PAYMENT_TILL_TEXT}</div>
                         </div>
                     `;
                     document.getElementById('priceEstimate').style.display = 'block';
@@ -1170,6 +1176,7 @@ function calculatePrice() {
                             <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">
                                 Balance on delivery: Ksh ${Math.round(totalPrice * 0.5).toLocaleString()}
                             </div>
+                            <div style="font-size: 0.9rem; margin-top: 5px;"><i class="fas fa-mobile-alt"></i> Pay deposit via ${PAYMENT_TILL_TEXT}</div>
                         </div>
                     `;
                     document.getElementById('priceEstimate').style.display = 'block';
@@ -1190,6 +1197,7 @@ function calculatePrice() {
                             <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">
                                 Balance on delivery: Ksh ${Math.round(totalPrice * 0.5).toLocaleString()}
                             </div>
+                            <div style="font-size: 0.9rem; margin-top: 5px;"><i class="fas fa-mobile-alt"></i> Pay deposit via ${PAYMENT_TILL_TEXT}</div>
                         </div>
                     `;
                     document.getElementById('priceEstimate').style.display = 'block';
@@ -1207,6 +1215,7 @@ function calculatePrice() {
                     <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">
                         Balance on delivery: Ksh ${Math.round(totalPrice * 0.5).toLocaleString()}
                     </div>
+                    <div style="font-size: 0.9rem; margin-top: 5px;"><i class="fas fa-mobile-alt"></i> Pay deposit via ${PAYMENT_TILL_TEXT}</div>
                 </div>
             `;
         } else {
@@ -1220,6 +1229,7 @@ function calculatePrice() {
                     <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">
                         Balance on delivery: Ksh ${(totalPrice - depositAmount).toLocaleString()}
                     </div>
+                    <div style="font-size: 0.9rem; margin-top: 5px;"><i class="fas fa-mobile-alt"></i> Pay deposit via ${PAYMENT_TILL_TEXT}</div>
                 </div>
             `;
         }
@@ -1513,9 +1523,10 @@ function sendOrderEmail(orderDetails) {
                 farm_phone: '+254769583063',
                 farm_email: 'kienyejifreshfarm@gmail.com',
                 special_instructions: orderDetails.specialInstructions || 'None',
+                payment_method: PAYMENT_TILL_TEXT,
                 message: (orderDetails.orderType.includes('eggs')) ? 
-                    `Thank you for your order! We will contact you soon to confirm and arrange delivery of your fresh eggs.` : 
-                    `Thank you for your order! We will contact you soon to confirm and arrange delivery of your fresh chicken.`
+                    `Thank you for your order! We will contact you soon to confirm and arrange delivery of your fresh eggs. To pay your deposit instantly, use ${PAYMENT_TILL_TEXT}.` : 
+                    `Thank you for your order! We will contact you soon to confirm and arrange delivery of your fresh chicken. To pay your deposit instantly, use ${PAYMENT_TILL_TEXT}.`
             };
             
             // Send customer confirmation (using the correct template ID)
@@ -1523,7 +1534,7 @@ function sendOrderEmail(orderDetails) {
         })
         .then(function(customerResponse) {
             console.log('Customer confirmation sent successfully:', customerResponse.status, customerResponse.text);
-            alert('🎉 Order sent successfully! \n\n✅ You will receive a confirmation email shortly\n✅ We will contact you soon to confirm your order and arrange delivery.');
+            alert('🎉 Order sent successfully! \n\n✅ You will receive a confirmation email shortly\n✅ We will contact you soon to confirm your order and arrange delivery.\n\n💳 To pay your deposit instantly: ' + PAYMENT_TILL_TEXT);
             closeEmailOrderModal();
         })
         .catch(function(error) {
@@ -1582,7 +1593,7 @@ function getOrderTypeText(orderType) {
         
         // Egg Products
         case 'eggs-kienyeji': return 'Kienyeji Eggs (Ksh 900/tray)';
-        case 'eggs-broiler': return 'Broiler Layers Eggs (Ksh 400/tray)';
+        case 'eggs-broiler': return 'Broiler Layers Eggs (Ksh 450/tray)';
         
         default: return 'Kienyeji Farm Fresh Order';
     }
@@ -1694,7 +1705,7 @@ function selectOrderType(orderType) {
                         preMessage = 'I need a bulk quote for Broiler chickens at Ksh 900 per bird. Please provide availability and delivery options for 50+ birds. I understand a 50% deposit is required before processing begins.';
                         break;
                     case 'eggs-broiler':
-                        preMessage = 'I would like to order Broiler Layers eggs at Ksh 400 per tray. Please provide availability and delivery details. I understand a 50% deposit is required before processing.';
+                        preMessage = 'I would like to order Broiler Layers eggs at Ksh 450 per tray. Please provide availability and delivery details. I understand a 50% deposit is required before processing.';
                         break;
                     // Legacy support
                     case 'live-kienyeji':
@@ -1901,7 +1912,7 @@ function selectOrderType(orderType) {
                         preMessage = 'I need a bulk quote for Broiler chickens at Ksh 400 per kg. Please provide availability and delivery options for 50+ birds. I understand a 50% deposit is required before processing begins.';
                         break;
                     case 'eggs-broiler':
-                        preMessage = 'I would like to order Broiler Layers eggs at Ksh 400 per tray. Please provide availability and delivery options. I understand a 50% deposit is required before processing.';
+                        preMessage = 'I would like to order Broiler Layers eggs at Ksh 450 per tray. Please provide availability and delivery options. I understand a 50% deposit is required before processing.';
                         break;
                     default:
                         preMessage = 'I am interested in placing an order. Please provide pricing and availability information. I understand a 50% deposit is required before processing begins.';

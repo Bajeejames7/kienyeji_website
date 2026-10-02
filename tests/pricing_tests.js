@@ -20,7 +20,7 @@ const PRICING_CONFIG = {
     },
     eggs: {
         kienyeji: 900,  // per tray
-        broiler: 400    // per tray
+        broiler: 450    // per tray
     }
 };
 
@@ -66,7 +66,7 @@ function getOrderTypeText(orderType) {
         case 'cleaned-hens-premium-kienyeji': return 'Slaughtered & Cleaned Hens (Premium) - Ksh 1,300/bird';
         case 'bulk-kienyeji': return 'Bulk Kienyeji Order - Ksh 1,000/bird';
         case 'eggs-kienyeji': return 'Kienyeji Eggs (Ksh 900/tray)';
-        case 'eggs-broiler': return 'Broiler Layers Eggs (Ksh 400/tray)';
+        case 'eggs-broiler': return 'Broiler Layers Eggs (Ksh 450/tray)';
         default: return 'Kienyeji Farm Order';
     }
 }
@@ -156,13 +156,13 @@ class PricingTestSuite {
         // Test 10: Broiler Eggs Pricing (3 trays)
         this.test('Broiler eggs pricing calculation', () => {
             const price = calculateTestPrice('eggs-broiler', 3); // 3 trays
-            this.assertEqual(price, 1200, 'Broiler Eggs: 3 trays × 400 = 1200');
+            this.assertEqual(price, 1350, 'Broiler Eggs: 3 trays × 450 = 1350');
         });
 
         // Test 10b: Broiler Eggs Pricing (10 trays)
         this.test('Broiler eggs pricing - 10 trays', () => {
             const price = calculateTestPrice('eggs-broiler', 10); // 10 trays
-            this.assertEqual(price, 4000, 'Broiler Eggs: 10 trays × 400 = 4000');
+            this.assertEqual(price, 4500, 'Broiler Eggs: 10 trays × 450 = 4500');
         });
 
         // Test 11: getOrderTypeText for Live Jogoo
@@ -192,7 +192,7 @@ class PricingTestSuite {
         // Test 15: getOrderTypeText for Broiler Eggs
         this.test('getOrderTypeText for Broiler Eggs', () => {
             const text = getOrderTypeText('eggs-broiler');
-            this.assertEqual(text, 'Broiler Layers Eggs (Ksh 400/tray)');
+            this.assertEqual(text, 'Broiler Layers Eggs (Ksh 450/tray)');
         });
 
         // Test 16: Deposit Calculation

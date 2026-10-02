@@ -362,7 +362,7 @@ def page_eggs():
     wa_text = "Hi Kienyeji Farm Fresh, I'd like to order Improved Kienyeji eggs. Number of trays: __ . Delivery location: __"
     faqs = [
         ('How much is a tray of kienyeji eggs?',
-         'Our Improved Kienyeji eggs are <strong>Ksh 900 per tray of 30</strong>, which works out to about Ksh 30 an egg. Layers eggs are Ksh 400 per tray.'),
+         'Our Improved Kienyeji eggs are <strong>Ksh 900 per tray of 30</strong>, which works out to about Ksh 30 an egg. Layers eggs are Ksh 450 per tray.'),
         ('Do you deliver eggs the same day?',
          'Yes. We offer same-day delivery within Nairobi for orders placed before 2 PM. Delivery is Ksh 200 within Nairobi and Ksh 300-500 to surrounding counties. You can also pick up free from the farm, 8 AM - 6 PM daily.'),
         ('Do you supply eggs to shops, hotels and restaurants?',
@@ -385,7 +385,7 @@ def page_eggs():
                         <tbody>
                             <tr><th scope="row">Improved Kienyeji eggs</th><td>Tray of 30</td><td class="price">Ksh 900</td></tr>
                             <tr><th scope="row">Improved Kienyeji eggs, bulk</th><td>10+ trays</td><td class="price">Ask for a quote</td></tr>
-                            <tr><th scope="row">Layers eggs</th><td>Tray of 30</td><td class="price">Ksh 400</td></tr>
+                            <tr><th scope="row">Layers eggs</th><td>Tray of 30</td><td class="price">Ksh 450</td></tr>
                             <tr><th scope="row">Layers eggs, bulk</th><td>20+ trays</td><td class="price">Ask for a quote</td></tr>
                         </tbody>
                     </table>
@@ -404,7 +404,7 @@ def page_eggs():
                             <tr><td>The hens</td><td>Free-range Improved Kienyeji hens</td><td>Commercial layer breeds kept in houses</td></tr>
                             <tr><td>Size</td><td>Often a little smaller</td><td>Larger and very uniform</td></tr>
                             <tr><td>Yolk</td><td>Often a deeper yellow-orange, as the hens forage on greens</td><td>Usually a lighter yellow</td></tr>
-                            <tr><td>Price (tray of 30)</td><td>Ksh 900</td><td>Ksh 400</td></tr>
+                            <tr><td>Price (tray of 30)</td><td>Ksh 900</td><td>Ksh 450</td></tr>
                             <tr><td>Best for</td><td>Boiled and fried eggs, breakfast, children</td><td>Baking, cooking in large quantities, catering</td></tr>
                         </tbody>
                     </table>

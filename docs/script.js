@@ -1524,6 +1524,8 @@ function sendOrderEmail(orderDetails) {
                 farm_email: 'kienyejifreshfarm@gmail.com',
                 special_instructions: orderDetails.specialInstructions || 'None',
                 payment_method: PAYMENT_TILL_TEXT,
+                deposit_amount: templateParams.deposit_amount,
+                balance_amount: templateParams.balance_amount,
                 message: (orderDetails.orderType.includes('eggs')) ? 
                     `Thank you for your order! We will contact you soon to confirm and arrange delivery of your fresh eggs. To pay your deposit instantly, use ${PAYMENT_TILL_TEXT}.` : 
                     `Thank you for your order! We will contact you soon to confirm and arrange delivery of your fresh chicken. To pay your deposit instantly, use ${PAYMENT_TILL_TEXT}.`
